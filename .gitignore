@@ -1,0 +1,26 @@
+# General
+.DS_Store
+.env
+*.log
+.history/
+
+# Node
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env
+
+# Backend
+backend/node_modules/
+backend/dist/
+backend/.env
+
+# IDE
+.vscode/
+.idea/
