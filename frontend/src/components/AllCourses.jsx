@@ -2,11 +2,12 @@
 import { useState, useEffect } from 'react'
 import { icons } from '../assets/icons/icon'
 import { thumbnail } from '../assets/thumbnails/thumbnail'
+import { Link ,useParams} from 'react-router-dom'
 
 export default function AllCourses() {
     const Course = [
-        {
-            name: "Commercial Architecture", category: "Commercial", 
+        {   
+            name: "Commercial Architecture", category: "Commercial",
             teacher: "John Doe",
             weeks: 4,
             students: 120,
@@ -25,6 +26,28 @@ export default function AllCourses() {
             discountPrice: 129,
             thumbnail: thumbnail.i2,
             lessons: 14,
+        },
+        {
+            name: "Retail Shop Planning",
+            category: "Shop",
+            teacher: "Mohit",
+            weeks: 5,
+            students: 140,
+            basePrice: 349,
+            discountPrice: 200,
+            thumbnail: thumbnail.i3,
+            lessons: 22,
+        },
+        {
+            name: "Retail Shop Planning",
+            category: "Shop",
+            teacher: "Mohit",
+            weeks: 5,
+            students: 140,
+            basePrice: 349,
+            discountPrice: 200,
+            thumbnail: thumbnail.i3,
+            lessons: 22,
         },
         {
             name: "Retail Shop Planning",
@@ -106,9 +129,8 @@ export default function AllCourses() {
 
     ]
     const [currentItems, setCurrentItems] = useState(Course.slice(0, 8));
-    const itemsPerPage = 8;
+    const itemsPerPage = 5;
     const [currentPage, setCurrentPage] = useState(1)
-    const [filter, setFilter] = useState(Course)
     const handlePre = () => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
@@ -127,11 +149,10 @@ export default function AllCourses() {
         { name: 'Shop', selected: false, count: 15 },
         { name: 'Educate', selected: false, count: 15 },
         { name: 'Academy', selected: false, count: 15 },
-        { name: 'Single family ', selected: false, count: 15 },
         { name: 'Studio', selected: false, count: 15 },
         { name: 'University', selected: false, count: 15 },
     ])
-    const [teacher, setTeachers] = useState(null)
+
 
 
 
@@ -144,20 +165,6 @@ export default function AllCourses() {
         })
         setCategories(updatedCategories)
     }
-
-    
-
-    const totalPages = Math.ceil(Course.length / itemsPerPage);
-    const arr = Array.from({ length: totalPages }, (_, index) => index + 1);
-    const totalItems = Course.length;
-    useEffect(() => {
-        const handlePage = (e) => {
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            setCurrentItems(Course.slice(startIndex, endIndex));
-        }
-        handlePage();
-    }, [currentPage])
     const selectedCategories = categories
         .filter(cat => cat.selected)
         .map(cat => cat.name.trim().toLowerCase());
@@ -165,8 +172,22 @@ export default function AllCourses() {
     const filteredCourses = currentItems.filter(course =>
         selectedCategories.includes(course.category.trim().toLowerCase())
     )
-    const uniqueCategories = [...new Set(Course.map((course,index) => course.teacher))];
-    console.log(uniqueCategories);
+
+    const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
+    const arr = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+
+
+    if (filteredCourses.length === 0) {
+        filteredCourses.push(...Course);
+    }
+    else {
+        filteredCourses.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    const uniqueCategories = [...new Set(Course.map((course, index) => course.teacher))];
+console.log(useParams());
+
     return (
         <>
             <div className='flex mx-auto my-4 w-[80%] gap-5 '>
@@ -179,34 +200,37 @@ export default function AllCourses() {
                             filteredCourses.map((item, index) => {
 
                                 return (
-
-                                    <div className='flex gap-4  items-center bg-[#F5F5F5] overflow-hidden shadow-2xl w-full h-[180px] py-3 px-0 rounded-3xl' key={index}>
-                                        <div>
-                                            <img src={item.thumbnail} alt="thumbnail" className='w-80 h-45 ' />
-                                        </div>
-                                        <div className="flex flex-col w-full  justify-between h-[90%]">
-                                            <div className="">
-                                                <div className='flex flex-col gap-2'>
-                                                    <div className='font-Exo'><span className='font-Jost text-[#555555] text-sm'>by</span> {item.teacher}</div>
-                                                    <div className='font-Exo font-semibold text-2xl'>{item.name}</div>
-                                                    <div className='flex gap-4'>
-                                                        <p className='flex items-center '> <span> <img src={icons.icon12} alt="" /></span>{item.weeks} weeks</p>
-                                                        <p className='flex items-center '><span> <img src={icons.icon11} alt="" /></span>{item.students} students</p>
-                                                        <p className='flex items-center '><span> <img src={icons.icon7} alt="" width={13} /></span>{item.lessons} lessons</p>
+                                    <div key={index}>
+                                        <Link to={`/courses/${item.name}`} className='no-underline text-black'>
+                                        <div className='flex gap-4  items-center bg-[#F5F5F5] overflow-hidden shadow-2xl w-full h-[180px] py-3 px-0 rounded-3xl' key={index}>
+                                            <div>
+                                                <img src={item.thumbnail} alt="thumbnail" className='w-80 h-45 ' />
+                                            </div>
+                                            <div className="flex flex-col w-full  justify-between h-[90%]">
+                                                <div className="">
+                                                    <div className='flex flex-col gap-2'>
+                                                        <div className='font-Exo'><span className='font-Jost text-[#555555] text-sm'>by</span> {item.teacher}</div>
+                                                        <div className='font-Exo font-semibold text-2xl'>{item.name}</div>
+                                                        <div className='flex gap-4'>
+                                                            <p className='flex items-center '> <span> <img src={icons.icon12} alt="" /></span>{item.weeks} weeks</p>
+                                                            <p className='flex items-center '><span> <img src={icons.icon11} alt="" /></span>{item.students} students</p>
+                                                            <p className='flex items-center '><span> <img src={icons.icon7} alt="" width={13} /></span>{item.lessons} lessons</p>
+                                                        </div>
+                                                        {/* <hr className='h-6 text-' /> */}
                                                     </div>
-                                                    {/* <hr className='h-6 text-' /> */}
                                                 </div>
-                                            </div>
-                                            <div className="flex justify-between items-center border-t-1 border-[#EAEAEA]  ">
-                                                <div className='flex gap-2 items-center font-bold'>
+                                                <div className="flex justify-between items-center border-t-1 border-[#EAEAEA]  ">
+                                                    <div className='flex gap-2 items-center font-bold'>
 
-                                                    <span className='text-gray-500 line-through'> {item.basePrice}</span>₹ {item.discountPrice}
-                                                </div>
-                                                <div>
-                                                    <p className='font-bold hover:text-[#ff772e] cursor-pointer mx-3'>View More</p>
+                                                        <span className='text-gray-500 line-through'> {item.basePrice}</span>₹ {item.discountPrice}
+                                                    </div>
+                                                    <div>
+                                                        <p className='font-bold hover:text-[#ff772e] cursor-pointer mx-3'>View More</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        </Link>
                                     </div>
                                 )
 
@@ -215,25 +239,24 @@ export default function AllCourses() {
                         }
 
                     </div>
-                    <div className='flex justify-between items-center mt-5 bg-[#F5F5F5] shadow-2xl w-full py-3 gap-3 rounded-3xl'>
-                        <button className={`mx-5 cursor-pointer font-medium  ${currentPage >= 2 ? 'text-black' : 'text-gray-600'} hover:text-amber-600`} onClick={handlePre}>Previous</button>
-                        <div>
+                    {
 
-                            {
-                                arr.map((i) => {
-                                    return (
-
-
-                                        <button key={i} className={`px-3 py-1 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-100'} ml-4 border`}
-                                            onClick={() => { setCurrentPage(i) }} value={i}>{i}</button>
-
-
-                                    )
-                                })
-                            }
+                        <div className='flex justify-between items-center mt-5 bg-[#F5F5F5] shadow-2xl w-full py-3 gap-3 rounded-3xl'>
+                            <button className={`mx-5 cursor-pointer font-medium  ${currentPage >= 2 ? 'text-black' : 'text-gray-600'} hover:text-amber-600`} onClick={handlePre}>Previous</button>
+                            <div>
+                                {
+                                    arr.map((i) => {
+                                        return (
+                                            <button key={i} className={`px-3 py-1 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-100'} ml-4 border`}
+                                                onClick={() => { setCurrentPage(i) }} value={i}>{i}</button>
+                                        )
+                                    })
+                                }
+                            </div>
+                            <button className={`mx-5 cursor-pointer font-medium ${currentPage < totalPages ? 'text-black' : 'text-gray-600'} hover:text-amber-600`} onClick={handleNext}>Next</button>
                         </div>
-                        <button className={`mx-5 cursor-pointer font-medium ${currentPage < totalPages ? 'text-black' : 'text-gray-600'} hover:text-amber-600`} onClick={handleNext}>Next</button>
-                    </div>
+                    }
+
                 </div>
                 <div className='w-[37%]'>
                     <div>
@@ -244,7 +267,7 @@ export default function AllCourses() {
                                     return (
                                         <div className='flex justify-between ' key={index}>
                                             <div>
-                                                <input type="checkbox" className='accent-black cursor-pointer'  onChange={(e) => handleCheck(e.target.checked, item.name)} />
+                                                <input type="checkbox" className='accent-black cursor-pointer' onChange={(e) => handleCheck(e.target.checked, item.name)} />
                                                 <span className='text-sm'>{item.name}</span>
                                             </div>
                                             <p>{item.count}</p>

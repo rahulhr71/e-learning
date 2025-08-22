@@ -45,14 +45,14 @@ export default function Courses() {
     ]
     const totalPages = Math.ceil(Course.length / itemsPerPage);
     const arr= Array.from({ length: totalPages }, (_, index) => index + 1);
-    console.log(arr);
+  
     const [currentPage, setCurrentPage] = useState(1);
 
     const totalItems = Course.length;
-    console.log("Total Items:", totalItems);
+ 
     
     const [currentItems, setCurrentItems] = useState(Course.slice(0, 8));
-    console.log("Current Items:", currentItems);
+
     useEffect(() => {
         const handlePage =(e)=>{
             const startIndex = (currentPage - 1) * itemsPerPage;

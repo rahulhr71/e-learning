@@ -5,7 +5,7 @@ import Register from './auth/Register';
 import Dashboard from './pages/Dashboard';
 import Courses from './components/Courses';
 import CoursePage from './pages/CoursePage';
-
+import CourseOverview from './pages/CourseOverview';
 function App() {
   return (
     <BrowserRouter>
@@ -15,7 +15,7 @@ function App() {
         <Route path='/register' element={<Register/>} />
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/courses' element={<CoursePage/> } />
-        <Route path='/courses/:id' element={<Courses/>}/>
+        <Route path='/courses/:id' element={<CourseOverview/>}/>
         <Route path="/blog" element={<div>Blog Page</div>} />
         <Route path="/page" element={<div>Contact Page</div>} />
         <Route path="/contact" element={<div>Contact Page</div>} />
@@ -24,7 +24,6 @@ function App() {
         <Route path="/help" element={<div>Help Page</div>} />
         <Route path="/terms" element={<div>Terms and Conditions Page</div>} />
         <Route path="/privacy" element={<div>Privacy Policy Page</div>} />
-      
       </Routes>
     </BrowserRouter>
   );
