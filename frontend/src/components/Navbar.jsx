@@ -8,10 +8,9 @@ export default function Navbar() {
   const items = [
     { name: "Home", link: "/", active: true },
     { name: "Courses", link: "/courses", active: false },
-    { name: "Blog", link: "/blog", active: false },
-    { name: "Page", link: "/page", active: false },
-    { name: "LearnPress Add-On", link: "/LearnPressAdd-On", active: false },
-    { name: "Prenium Theme", link: "/PreniumTheme", active: false },
+    { name: "Notes", link: "/notes", active: false },
+    { name: "Contact us", link: "/contact", active: false },
+    { name: "About Us", link: "/about", active: false },
   ]
   return (
     <div>
@@ -25,7 +24,7 @@ export default function Navbar() {
                   items.map((item, index) => {
                     return (
                       <Link to={item.link} key={index}>
-                        <li className={`hover:bg-[#F5F5F5] p-2 cursor-pointer hover:text-[#ff772e] ${active === item.name ? "text-[#ff772e]" : "text-gray-600"}`} key={index} onClick={() => { setActive(item.name) }} >{item.name}</li>
+                       <li className={`hover:bg-[#F5F5F5] p-2 cursor-pointer hover:text-[#ff772e] ${active === item.name ? "text-[#ff772e]" : "text-gray-600"}`} key={index} onClick={() => { setActive(item.name) }} >{item.name}</li>
                       </Link>
                     )
                   })

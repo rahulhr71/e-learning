@@ -5,7 +5,9 @@ import Register from './auth/Register';
 import Dashboard from './pages/Dashboard';
 import Courses from './components/Courses';
 import CoursePage from './pages/CoursePage';
+import Contact from './components/Contact';
 import CourseOverview from './pages/CourseOverview';
+import NotesPage from './pages/NotesPage';
 function App() {
   return (
     <BrowserRouter>
@@ -15,10 +17,10 @@ function App() {
         <Route path='/register' element={<Register/>} />
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/courses' element={<CoursePage/> } />
-        <Route path='/courses/:id' element={<CourseOverview/>}/>
+        <Route path='courses/:id' element={<CourseOverview/>}/>
         <Route path="/blog" element={<div>Blog Page</div>} />
-        <Route path="/page" element={<div>Contact Page</div>} />
-        <Route path="/contact" element={<div>Contact Page</div>} />
+        <Route path="/notes" element={<NotesPage/>} />
+        <Route path="/contact" element={<Contact/>} />
         <Route path="/profile" element={<div>Profile Page</div>} />
         <Route path="/settings" element={<div>Settings Page</div>} />
         <Route path="/help" element={<div>Help Page</div>} />

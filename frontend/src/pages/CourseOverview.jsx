@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { Collapse } from 'antd';
 import { useParams } from 'react-router-dom'
@@ -7,63 +7,77 @@ import { GraduationCap, BarChart2, FileText, BookOpen, Users, Play } from "lucid
 import Footer from '../components/Footer'
 const CourseOverview = () => {
     const { id } = useParams();
+    const [activeLesson, setActiveLesson] = useState("chapter 1")
     const [active, setactive] = useState("overview")
     const [video, setvideo] = useState("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
-    const text = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic nihil perferendis similique?"
-    const handleClick = (items) => {
-        setvideo(items)
+    const handleClick = (url, key) => {
+        setActiveLesson(key)
+        setvideo(url)
+
+
     }
+    useEffect(() => {
+        console.log(activeLesson);
+    }, [activeLesson])
+    const FAQs = [
+        {
+            key: '1',
+            label: 'What Does Royalty Free Mean?',
+
+            children: ["Lorem ipsum dolor sitdkjw dwnkjdw dnwkjfwn fwlnkjfw fwjnfj fwjbnf fwf jk f kjw  d amet consectetur adipisicing elit. Harum culpa veniam quia architecto?"]
+        },
+        {
+            key: '2',
+            label: 'What Does Royalty Free Mean?',
+            children: ["Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum culpa veniam quia architecto?"]
+        }
+    ]
     const lessons = [
         {
             key: '1',
             title: 'Introduction',
-            url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            children: [
+                { name: "chapter 1", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" },
+                { name: "chapter 2", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" },
+                { name: "chapter 3", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" },
+            ]
+
         },
         {
             key: '2',
-            title: 'Lesson 2',
-            url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            title: 'HTML CSS JS',
+            children: [
+                { name: "chapter 4", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" },
+                { name: "chapter 5", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4" },
+                { name: "chapter 6", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" },
+            ]
         }
     ];
-    const items = lessons.map(lesson => ({
+    const items = lessons.map((lesson) => ({
         key: lesson.key,
         label: lesson.title,
         children: (
-            <div className="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition">
-                <h2 className="text-base font-medium text-gray-800">{lesson.title}</h2>
-                <button
-                    onClick={() => handleClick(lesson.url)}
-                    className="flex items-center gap-1 bg-indigo-600 text-white px-3 py-1.5 rounded-md hover:bg-indigo-700 transition text-sm"
-                >
-                    <Play size={16} />
-                    Play
-                </button>
+            <div className="space-y-2" key={lesson.key}>
+                {lesson.children?.map((sub, index) => (
+                    <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200 hover:shadow-sm transition"
+                    >
+
+                        <span className={`${activeLesson === sub.name ? "text-sm text-blue-800" : "text-sm text-gray-700"} `}>{sub.name}</span>
+                        <button
+                            onClick={() => handleClick(sub.url, sub.name)}
+                            className="flex items-center gap-1 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700 transition text-sm"
+                        >
+                            <Play size={14} />
+                            Play
+                        </button>
+                    </div>
+                ))}
             </div>
-        )
+        ),
     }));
-    // const items = [
-    //     {
-    //         key: '1',
-    //         label: 'Lesson with video content',
-    //         url:"http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    //         children: (
-    //             < div >
-    //                 <h2>Introduction</h2>
-    //                 <button className="bg-amber-700 p-1 rounded-sm" onClick={()=>handleclick()}>Play</button>
-    //             </div >
-    //         ),
-    //     },
-    //     {
-    //         key: '2',
-    //         label: 'This is  header 2',
-    //         children: <p>{text}</p>,
-    //     },
-    //     {
-    //         key: '3',
-    //         label: 'This is panel header 3',
-    //         children: <p>{text}</p>,
-    //     },
-    // ];
+
     return (
         <div>
             <Navbar />
@@ -136,7 +150,11 @@ const CourseOverview = () => {
                         <div className='p-2  bg-[#EAEAEA] rounded-b-lg text-[#555555]'>
                             {active === "overview" && <Overview />}
 
-                            {active === "curriculum" && (<div><video controls width="100%" autoPlay="true" src={video} className='rounded-lg mb-4'></video><Collapse accordion items={items} /> </div>)}
+                            {active === "curriculum" && (<div><video controls autoPlay
+                                muted
+                                loop
+                                playsInline
+                                width="100%" src={video} className='rounded-lg mb-4'></video><Collapse accordion items={items} /> </div>)}
                             {active === "instructor" && <div className='flex gap-4 items-center'>
 
                                 <img src={thumbnail.i1} alt="" width={100} />
@@ -153,22 +171,9 @@ const CourseOverview = () => {
                                     </div>
                                 </div>
                             </div>}
-                            {active === "faqs" && <div className='flex flex-col gap-4'>
-                                <h1 className='text-gray-500 font-Exo text-xl'>Frequently Asked Questions</h1>
-                                <p className='text-gray-400'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.</p>
-                                <div className='border p-3 rounded-lg'>
-                                    <h2 className='font-bold'>Question 1: What is the course duration?</h2>
-                                    <p className='text-gray-500'>Answer: The course duration is 2 weeks.</p>
-                                </div>
-                                <div className='border p-3 rounded-lg'>
-                                    <h2 className='font-bold'>Question 2: Are there any prerequisites?</h2>
-                                    <p className='text-gray-500'>Answer: No, there are no prerequisites for this course.</p>
-                                </div>
-                                <div className='border p-3 rounded-lg'>
-                                    <h2 className='font-bold'>Question 3: What is the course fee?</h2>
-                                    <p className='text-gray-500'>Answer: The course fee is ₹70 after discount.</p>
-                                </div>
-                            </div>}
+                            {active === "faqs" &&
+                                <Collapse accordion items={FAQs} />
+                            }
                             {active === "review" && <div className='flex flex-col gap-4'>
                                 <h1 className='text-gray-500 font-Exo text-xl'>Reviews</h1>
                                 <p className='text-gray-400'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.</p>
