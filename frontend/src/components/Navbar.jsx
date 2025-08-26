@@ -24,7 +24,7 @@ export default function Navbar() {
                   items.map((item, index) => {
                     return (
                       <Link to={item.link} key={index}>
-                       <li className={`hover:bg-[#F5F5F5] p-2 cursor-pointer hover:text-[#ff772e] ${active === item.name ? "text-[#ff772e]" : "text-gray-600"}`} key={index} onClick={() => { setActive(item.name) }} >{item.name}</li>
+                        <li className={`hover:bg-[#F5F5F5] p-2 cursor-pointer hover:text-[#ff772e] ${active === item.name ? "text-[#ff772e]" : "text-gray-600"}`} key={index} onClick={() => { setActive(item.name) }} >{item.name}</li>
                       </Link>
                     )
                   })
