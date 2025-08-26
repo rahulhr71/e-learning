@@ -8,6 +8,7 @@ import CoursePage from './pages/CoursePage';
 import Contact from './components/Contact';
 import CourseOverview from './pages/CourseOverview';
 import NotesPage from './pages/NotesPage';
+import AboutUs from './pages/About'
 function App() {
   return (
     <BrowserRouter>
@@ -23,7 +24,7 @@ function App() {
         <Route path="/contact" element={<Contact/>} />
         <Route path="/profile" element={<div>Profile Page</div>} />
         <Route path="/settings" element={<div>Settings Page</div>} />
-        <Route path="/help" element={<div>Help Page</div>} />
+        <Route path="/about" element={<AboutUs/>} />
         <Route path="/terms" element={<div>Terms and Conditions Page</div>} />
         <Route path="/privacy" element={<div>Privacy Policy Page</div>} />
       </Routes>

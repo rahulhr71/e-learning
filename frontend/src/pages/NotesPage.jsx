@@ -5,21 +5,24 @@ export default function NotesPage() {
   const [notes] = useState([
     {
       id: 1,
-      title: "Chapter 1 - Computer Basics",
-      description: "Handwritten notes on fundamentals",
-      image: "https://drive.google.com/uc?export=view&id=YOUR_FILE_ID",
+      title: "Python Programming",
+      description: "Python Handwritten notes ",
+      image: "https://cwh-full-next-space.fra1.cdn.digitaloceanspaces.com/notes/Python_Complete_Notes.pdf",
+      url:"https://www.codewithharry.com/img/notes/python.webp"
     },
     {
       id: 2,
-      title: "Chapter 2 - Data Structures",
-      description: "Notes on arrays, linked lists",
-      image: "https://drive.google.com/uc?export=view&id=YOUR_FILE_ID",
+      title: "C programming",
+      description: "C programming Language ",
+      image: "https://cwh-full-next-space.fra1.cdn.digitaloceanspaces.com/notes/C_Complete_Notes.pdf",
+      url:"https://www.codewithharry.com/img/notes/c.webp"
     },
     {
       id: 3,
-      title: "Chapter 3 - Algorithms",
-      description: "Sorting, Searching notes",
-      image: "https://drive.google.com/uc?export=view&id=YOUR_FILE_ID",
+      title: "JavaScript Notes",
+      description: "JavaScript Notes ,Download here",
+      image: "https://cwh-full-next-space.fra1.cdn.digitaloceanspaces.com/notes/JS_Chapterwise_Notes.pdf",
+      url:"https://www.codewithharry.com/img/notes/js.webp"
     },
   ]);
 
@@ -57,13 +60,13 @@ export default function NotesPage() {
           {filteredNotes.map((note) => (
             <div
               key={note.id}
-              className="bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden flex flex-col"
+              className="bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden flex flex-col p-4  "
             >
               <div className="overflow-hidden h-40 sm:h-32 md:h-36">
                 <img
-                  src={note.image}
+                  src={note.url}
                   alt={note.title}
-                  className="w-full h-full object-cover transform hover:scale-105 transition duration-300"
+                  className="w-full h-full object-contain transform hover:scale-105 transition duration-300"
                 />
               </div>
               <div className="p-3 flex-1 flex flex-col justify-between">

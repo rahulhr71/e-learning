@@ -202,7 +202,7 @@ console.log(useParams());
                                 return (
                                     <div key={index}>
                                         <Link to={`/courses/${item.name}`} className='no-underline text-black'>
-                                        <div className='flex gap-4  items-center bg-[#F5F5F5] overflow-hidden shadow-2xl w-full h-[180px] py-3 px-0 rounded-3xl' key={index}>
+                                        <div className='flex gap-4  items-center bg-[#F5F5F5] overflow-hidden shadow-xl w-full h-[180px] py-3 px-0 rounded-xl' key={index}>
                                             <div>
                                                 <img src={item.thumbnail} alt="thumbnail" className='w-80 h-45 ' />
                                             </div>
