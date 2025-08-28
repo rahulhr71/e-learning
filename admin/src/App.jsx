@@ -1,14 +1,11 @@
-import { Home } from "@mui/icons-material"
-
-import { lazy,Suspense } from "react"
-const HomePage=lazy(()=>import('./pages/HomePage'))
+import AdminDashboard from "./pages/AdminDashboard"
 function App() {
   
   return (
     <>
-   <Suspense fallback={<div>loading</div>}>
-   <HomePage/>
-   </Suspense>
+  
+   <AdminDashboard/>
+ 
     </>
   )
 }

@@ -1,12 +1,12 @@
 
 import {lazy,Suspense} from 'react'
-const Sidebar =lazy(()=>import('../components/Sidebar'))
+const AdminDashboard =lazy(()=>import('../components/Content'))
 
 const HomePage = () => {
   return (
     <div>
         <Suspense fallback={<div>Loading</div>}>
-          <Sidebar/>
+          <AdminDashboard/>
         </Suspense>
 
       

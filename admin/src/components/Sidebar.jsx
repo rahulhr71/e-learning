@@ -1,130 +1,43 @@
-// SidebarLayout.jsx
-import React, { useState } from "react";
+// components/Sidebar.jsx
+import React from "react";
 import {
-  Box,
-  Drawer,
-  AppBar,
-  Toolbar,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  IconButton,
-  Typography,
-  CssBaseline,
-} from "@mui/material";
-import {
-  Menu as MenuIcon,
-  Home as HomeIcon,
-  Book as BookIcon,
-  Settings as SettingsIcon,
-} from "@mui/icons-material";
-import PersonIcon from "@mui/icons-material/Person"; // User icon
-import DescriptionIcon from "@mui/icons-material/Description"; // Notes icon
-import { useAdmin } from "../context/adminContext";
-import Content from "../pages/Content";
+  Home,
+  BookOpen,
+  Users,
+  FileText,
+  BarChart2,
+  Settings,
+} from "lucide-react";
 
-const drawerWidth = 230;
+const SidebarItems = [
+  { text: "Home", icon: <Home size={20} /> },
+  { text: "Courses", icon: <BookOpen size={20} /> },
+  { text: "Notes", icon: <FileText size={20} /> },
+  { text: "Users", icon: <Users size={20} /> },
+  { text: "Analytics", icon: <BarChart2 size={20} /> },
+  { text: "Settings", icon: <Settings size={20} /> },
+];
 
-const Sidebar = () => {
-  const [open, setOpen] = useState(true);
-  const { setActiveComponent, activeComponent } = useAdmin();
-
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-
+export default function Sidebar({ active, setActive }) {
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-
-      {/* Top AppBar */}
-      <AppBar
-        position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={toggleDrawer}
-            sx={{ mr: 2 }}
+    <aside className="w-64 bg-gray-800 text-white flex flex-col">
+      <div className="p-4 font-bold text-lg border-b border-gray-700">
+        E-Learning Admin
+      </div>
+      <nav className="flex-1">
+        {SidebarItems.map((item) => (
+          <button
+            key={item.text}
+            onClick={() => setActive(item.text)}
+            className={`flex items-center gap-3 w-full p-3 text-left hover:bg-gray-700 transition ${
+              active === item.text ? "bg-gray-700" : ""
+            }`}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      {/* Sidebar Drawer */}
-      <Drawer
-        variant="persistent"
-        open={open}
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-      >
-        <Toolbar />
-        <Box sx={{ overflow: "auto" }}>
-          <List>
-            {[
-              { text: "Home", icon: <HomeIcon /> },
-              { text: "Courses", icon: <BookIcon /> },
-              { text: "Notes", icon: <DescriptionIcon /> },
-              { text: "All User", icon: <PersonIcon /> },
-              { text: "Settings", icon: <SettingsIcon /> },
-            ].map((item) => {
-              const isActive = activeComponent === item.text.toLowerCase();
-              return (
-                <ListItem
-                  key={item.text}
-                  component="button"
-                  selected={isActive}
-                  onClick={() =>
-                    setActiveComponent(item.text.toLowerCase())
-                  }
-                  className={`${isActive
-                      ? "bg-[#1976d2] text-amber-50 cursor-pointer"
-                      : "bg-white cursor-pointer text-gray-700"
-                    }`}
-                >
-                  <ListItemIcon
-                    className={`${isActive ? "text-amber-50" : "text-gray-700"}`}
-                  >
-                    {React.cloneElement(item.icon, {
-                      htmlColor: isActive ? "#fef3c7" : "#374151",
-                    })}
-                  </ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItem>
-              );
-            })}
-          </List>
-        </Box>
-      </Drawer>
-
-      {/* Main Content */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 0,
-          marginLeft: open ? `${0}px` : -27,
-          transition: "margin 0.3s ease",
-        }}
-      >
-        <Toolbar />
-        <Content />
-      </Box>
-    </Box>
+            {item.icon}
+            {item.text}
+          </button>
+        ))}
+      </nav>
+    </aside>
   );
-};
-
-export default Sidebar; 
+}
