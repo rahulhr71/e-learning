@@ -84,8 +84,8 @@ const CourseOverview = () => {
             <div className='flex items-center h-[60px] bg-[#F5F5F5]'>
                 <h1 className='text-[#555555] ml-30'>Course &gt;<span className='text-[#9D9D9D]'>{id}</span> &nbsp; </h1>
             </div>
-            <div className='w-full h-[200px] flex  items-center bg-black'>
-                <div className='w-4/5 m-auto'>
+            <div className='w-full  h-[230px]  flex justify-center items-center bg-black'>
+                <div>
                     <div className='flex gap-4 items-center'>
                         <p className='text-white bg-[#555555] p-1 rounded-sm'>Photography</p>
                         <h1 className='text-gray-300 '>by {"teacher name"}</h1>
@@ -122,13 +122,15 @@ const CourseOverview = () => {
                             </div>
 
                         </div>
-                        <div className='flex flex-col items-center gap-2 border rounded-2xl border-gray-400'>
-                            <img src={thumbnail.i1} alt="" width={250} />
-                            <div className='flex gap-4 py-3'>
-                                <p> <span className='line-through text-gray-500'> ₹100</span >  ₹70</p>
-                                <button className='bg-amber-500 py-1 px-2 cursor-pointer hover:bg-amber-600 rounded-2xl text-white '>Start Now </button>
-                            </div>
-                        </div>
+
+                    </div>
+
+                </div>
+                <div className='flex flex-col items-center gap-2 border rounded-2xl border-gray-400'>
+                    <img src={thumbnail.i1} alt="" width={240} />
+                    <div className='flex gap-4 py-3'>
+                        <p className='text-white'> <span className='line-through text-gray-500'> ₹100</span >  ₹70</p>
+                        <button className='bg-amber-500 py-1 px-2 cursor-pointer hover:bg-amber-600 rounded-2xl text-white '>Start Now </button>
                     </div>
                 </div>
             </div>
