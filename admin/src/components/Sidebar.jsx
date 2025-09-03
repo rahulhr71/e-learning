@@ -6,17 +6,20 @@ import {
   Users,
   FileText,
   BarChart2,
-  Settings,
+  Settings,PlusCircle,FilePlus
 } from "lucide-react";
 
 const SidebarItems = [
   { text: "Home", icon: <Home size={20} /> },
-  { text: "Courses", icon: <BookOpen size={20} /> },
-  { text: "Notes", icon: <FileText size={20} /> },
+  { text: "All Courses", icon: <BookOpen size={20} /> },
+  { text: "Add Course", icon: <PlusCircle size={20} /> }, // ✅ New
+  { text: "All Notes", icon: <FileText size={20} /> },
+  { text: "Add Notes", icon: <FilePlus size={20} /> },    // ✅ New
   { text: "Users", icon: <Users size={20} /> },
   { text: "Analytics", icon: <BarChart2 size={20} /> },
   { text: "Settings", icon: <Settings size={20} /> },
 ];
+
 
 export default function Sidebar({ active, setActive }) {
   return (

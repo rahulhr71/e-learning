@@ -12,8 +12,8 @@ import Frame4 from "../components/Frame4"
 import Footer from "../components/Footer"
 export default function Homepage() {
   return (
-    <div className="font-Exo">
-      <Navbar />
+    <div className="font-Exo w-full">
+      <Navbar /><br />
       <Hero />
       <Cateories /><br />
       <Courses />

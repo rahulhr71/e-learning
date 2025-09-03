@@ -1,177 +1,83 @@
-// components/Courses.jsx
-import React,{useState} from "react";
+import React, { useState, useEffect } from "react";
+import api from "../utility/api";
 
 export default function Courses() {
   return (
-   <div>
-    <CourseList/>
-   </div>
+    <div>
+      <CourseList />
+    </div>
   );
 }
 
 const CourseList = () => {
-  const [courses, setCourses] = useState([
-    {
-      name: "Commercial Architecture",
-      category: "Commercial",
-      teacher: "John Doe",
-      weeks: 4,
-      students: 120,
-      basePrice: 299,
-      discountPrice: 150,
-      thumbnail: "https://via.placeholder.com/150",
-      lessons: 18,
-    },
-    {
-      name: "Office Interior Design",
-      category: "Office",
-      teacher: "Kenny White",
-      weeks: 3,
-      students: 90,
-      basePrice: 249,
-      discountPrice: 129,
-      thumbnail: "https://via.placeholder.com/150",
-      lessons: 14,
-    },
-  ]);
-
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editData, setEditData] = useState({});
-  const [newCourse, setNewCourse] = useState({
-    name: "",
-    category: "",
-    teacher: "",
-    weeks: "",
-    students: "",
-    basePrice: "",
-    discountPrice: "",
-    thumbnail: "",
-    lessons: "",
-  });
 
-  // ✅ Delete course
-  const handleDelete = (index) => {
-    setCourses(courses.filter((_, i) => i !== index));
-  };
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await api.get("/courses/getcourse");
+        if (response.status === 200) {
+          setData(response.data.data);
+          setLoading(false);
+        }
+      } catch (e) {
+        alert(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourse();
+  }, []);
 
-  // ✅ Edit course
+ 
   const handleEdit = (index) => {
     setEditingIndex(index);
-    setEditData(courses[index]);
+    setEditData({ ...data[index] });
   };
 
-  // ✅ Save edited course
-  const handleSave = () => {
-    const updated = [...courses];
-    updated[editingIndex] = editData;
-    setCourses(updated);
-    setEditingIndex(null);
-    setEditData({});
-  };
 
-  // ✅ Add new course
-  const handleAddCourse = () => {
-    if (!newCourse.name || !newCourse.teacher) {
-      alert("Course name & teacher are required!");
-      return;
+  const handleSave = async () => {
+    try {
+      const updated = [...data];
+      updated[editingIndex] = editData;
+      setData(updated);
+
+      await api.put(`/courses/update/${editData._id}`, editData); // assumes backend route
+      setEditingIndex(null);
+    } catch (error) {
+      alert("Update failed: " + error.message);
     }
-    setCourses([...courses, newCourse]);
-    setNewCourse({
-      name: "",
-      category: "",
-      teacher: "",
-      weeks: "",
-      students: "",
-      basePrice: "",
-      discountPrice: "",
-      thumbnail: "",
-      lessons: "",
-    });
+  };
+
+ 
+  const handleDelete = async (index) => {
+    try {
+      const courseToDelete = data[index];
+      await api.delete(`/courses/delete/${courseToDelete._id}`); 
+      setData(data.filter((_, i) => i !== index));
+    } catch (error) {
+      alert("Delete failed: " + error.message);
+    }
   };
 
   return (
-    <div className="p-6">
-      {/* ✅ Add Course Form */}
-      <div className="bg-gray-100 p-4 rounded-lg mb-6">
-        <h2 className="text-xl font-bold mb-3">Add New Course</h2>
-        <div className="grid grid-cols-2 gap-2">
-          <input
-            type="text"
-            placeholder="Course Name"
-            value={newCourse.name}
-            onChange={(e) => setNewCourse({ ...newCourse, name: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
-            placeholder="Category"
-            value={newCourse.category}
-            onChange={(e) => setNewCourse({ ...newCourse, category: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
-            placeholder="Teacher"
-            value={newCourse.teacher}
-            onChange={(e) => setNewCourse({ ...newCourse, teacher: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            placeholder="Weeks"
-            value={newCourse.weeks}
-            onChange={(e) => setNewCourse({ ...newCourse, weeks: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            placeholder="Students"
-            value={newCourse.students}
-            onChange={(e) => setNewCourse({ ...newCourse, students: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            placeholder="Base Price"
-            value={newCourse.basePrice}
-            onChange={(e) => setNewCourse({ ...newCourse, basePrice: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            placeholder="Discount Price"
-            value={newCourse.discountPrice}
-            onChange={(e) => setNewCourse({ ...newCourse, discountPrice: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
-            placeholder="Thumbnail URL"
-            value={newCourse.thumbnail}
-            onChange={(e) => setNewCourse({ ...newCourse, thumbnail: e.target.value })}
-            className="border p-2 rounded"
-          />
-          <input
-            type="number"
-            placeholder="Lessons"
-            value={newCourse.lessons}
-            onChange={(e) => setNewCourse({ ...newCourse, lessons: e.target.value })}
-            className="border p-2 rounded"
-          />
-        </div>
-        <button
-          onClick={handleAddCourse}
-          className="mt-3 bg-green-600 text-white px-4 py-2 rounded"
-        >
-          Add Course
-        </button>
-      </div>
-
-      {/* ✅ Course Cards */}
+    <div>
+      
+      <br />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {courses.map((course, index) => (
+        {loading && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="w-12 h-12 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+          </div>
+        )}
+
+       
+        {data.map((course, index) => (
           <div
-            key={index}
+            key={course._id || index}
             className="bg-white shadow-md rounded-xl p-4 flex flex-col items-center"
           >
             <img
@@ -219,7 +125,9 @@ const CourseList = () => {
                 <p className="text-sm">
                   Price:{" "}
                   <span className="line-through">${course.basePrice}</span>{" "}
-                  <span className="text-green-600">${course.discountPrice}</span>
+                  <span className="text-green-600">
+                    ${course.discountPrice}
+                  </span>
                 </p>
 
                 <div className="flex gap-2 mt-3">
