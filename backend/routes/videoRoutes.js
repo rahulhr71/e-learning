@@ -6,5 +6,5 @@ const router = express.Router();
 
 
 router.post("/upload", upload.single("video"), uploadVideo);
-
+router.get("/getvideos/:id", require("../controllers/videoController").getVideosByCourse);
 module.exports = router;

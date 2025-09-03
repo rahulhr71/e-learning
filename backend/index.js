@@ -7,8 +7,12 @@ require('dotenv').config()
 const cors = require('cors')
 app.set('trust proxy', true)
 app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+];
 app.use(cors({
-    origin: "http://localhost:5174",
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }))

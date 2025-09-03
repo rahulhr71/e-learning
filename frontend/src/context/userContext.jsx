@@ -2,7 +2,6 @@ import { createContext, useContext } from 'react';
 const usercontext = createContext();
 import { useState ,useEffect} from "react";
 export const UserProvider = ({ children }) => {
-
     const [userC, setUserC] = useState(localStorage.getItem('login user') || null);
     useEffect(() => {
          const storedUser = localStorage.getItem('login user');
@@ -10,9 +9,6 @@ export const UserProvider = ({ children }) => {
              setUserC(storedUser);
          }
      }, [userC]);
-
-
- 
     localStorage.setItem('login user', userC);
 
     return (

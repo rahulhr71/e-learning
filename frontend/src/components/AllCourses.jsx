@@ -1,30 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { icons } from '../assets/icons/icon'
 import { thumbnail } from '../assets/thumbnails/thumbnail'
 import { Link } from 'react-router-dom'
+import {fetchCourses} from '../api/api'
 
 export default function AllCourses() {
-  const Course = [
-    { name: "Commercial Architecture", category: "Commercial", teacher: "John Doe", weeks: 4, students: 120, basePrice: 299, discountPrice: 150, thumbnail: thumbnail.i1, lessons: 18 },
-    { name: "Office Interior Design", category: "Office", teacher: "Kenny White", weeks: 3, students: 90, basePrice: 249, discountPrice: 129, thumbnail: thumbnail.i2, lessons: 14 },
-    { name: "Retail Shop Planning", category: "Shop", teacher: "Mohit", weeks: 5, students: 140, basePrice: 349, discountPrice: 200, thumbnail: thumbnail.i3, lessons: 22 },
-    { name: "Smart Classroom Setup", category: "Educate", teacher: "Priya", weeks: 4, students: 110, basePrice: 289, discountPrice: 160, thumbnail: thumbnail.i4, lessons: 16 },
-    { name: "Designing for Academies", category: "Academy", teacher: "Karan", weeks: 3, students: 100, basePrice: 259, discountPrice: 145, thumbnail: thumbnail.i5, lessons: 12 },
-    { name: "Single Family Home Design", category: "Single family home", teacher: "John Doe", weeks: 6, students: 160, basePrice: 399, discountPrice: 240, thumbnail: thumbnail.i6, lessons: 28 },
-    { name: "Studio Apartment Planning", category: "Studio", teacher: "Amit", weeks: 2, students: 85, basePrice: 199, discountPrice: 110, thumbnail: thumbnail.i7, lessons: 10 },
-    { name: "University Campus Design", category: "University", teacher: "Anjali", weeks: 5, students: 200, basePrice: 349, discountPrice: 190, thumbnail: thumbnail.i8, lessons: 20 }
-  ]
-
-  const [categories, setCategories] = useState([
-    { name: 'Commercial', selected: false },
-    { name: 'Office', selected: false },
-    { name: 'Shop', selected: false },
-    { name: 'Educate', selected: false },
-    { name: 'Academy', selected: false },
-    { name: 'Studio', selected: false },
-    { name: 'University', selected: false },
-  ])
-
+  const [courses, setCourses] = useState([])
+  
+  
+    const [categories, setCategories] = useState([
+      { name: 'Art & Design', selected: false },
+      { name: 'Development', selected: false },
+      { name: 'Communication', selected: false },
+      { name: 'VideoGrapgy', selected: false },
+      { name: 'Photography', selected: false },
+      { name: 'Marketing', selected: false },
+      { name: 'Content Writing', selected: false },
+      { name: 'Finance', selected: false },
+      { name: 'Science', selected: false },
+      { name: 'Network', selected: false },
+    ])
+useEffect(()=>{
+   const getCourses = async()=>{
+    try {
+      const {data} = await fetchCourses();
+      console.log(data.data);
+      setCourses(data.data)
+    } catch (error) {
+      console.log(error);
+    }
+   }
+    getCourses()
+},[])
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
 
@@ -42,10 +49,10 @@ export default function AllCourses() {
 
   const filteredCourses =
     selectedCategories.length > 0
-      ? Course.filter(course =>
+      ? courses.filter(course =>
           selectedCategories.includes(course.category.toLowerCase())
         )
-      : Course
+      : courses
 
   const totalPages = Math.ceil(filteredCourses.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
@@ -61,7 +68,7 @@ export default function AllCourses() {
         <div className="flex flex-col gap-6">
           {paginatedCourses.map((item, index) => (
             <Link
-              to={`/courses/${item.name}`}
+              to={`/courses/${item._id}`}
               key={index}
               className="no-underline text-black"
             >
@@ -169,7 +176,7 @@ export default function AllCourses() {
               </div>
               <p className="text-xs text-gray-500">
                 {
-                  Course.filter(
+                  courses.filter(
                     course =>
                       course.category.toLowerCase() === cat.name.toLowerCase()
                   ).length
