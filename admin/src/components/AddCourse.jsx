@@ -18,18 +18,18 @@ import Typography from "@mui/material/Typography";
 export default function AddCourse() {
     const steps = ["Add New Course", "Video Upload", "Publish Course"];
 
-const categories = [
-    "Art & Design",
-    "Development",
-    "Communication",
-    "Videography",
-    "Photography",
-    "Marketing",
-    "Content Writing",
-    "Finance",
-    "Science",
-    "Network",
-];
+    const categories = [
+        "Art & Design",
+        "Development",
+        "Communication",
+        "Videography",
+        "Photography",
+        "Marketing",
+        "Content Writing",
+        "Finance",
+        "Science",
+        "Network",
+    ];
     const [courseId, setCourseId] = useState(null);
     const [activeStep, setActiveStep] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -43,13 +43,14 @@ const categories = [
         discountPrice: "",
         thumbnail: "",
         lessons: "",
+        overview: "",
     });
 
     const handleChange = (e) => {
         setNewCourse({ ...newCourse, [e.target.name]: e.target.value });
     };
 
- 
+
     const handleAddCourse = async (e) => {
         e.preventDefault();
         if (!newCourse.name || !newCourse.teacher) {
@@ -74,6 +75,7 @@ const categories = [
                     discountPrice: "",
                     thumbnail: "",
                     lessons: "",
+                    overview: "",
                 });
                 setActiveStep(1); // move to video upload step
             }
@@ -181,6 +183,18 @@ const categories = [
                                     value={newCourse.lessons}
                                     onChange={handleChange}
                                 />
+                                <TextField
+                                    name="overview"
+                                    label="overview"
+                                    placeholder="Write detailed curriculum here (Topics, Chapters, etc.)"
+                                    multiline
+                                    rows={6}
+                                    fullWidth
+                                    margin="normal"
+                                    value={newCourse.overview}
+                                    onChange={handleChange}
+                                />
+
                             </Box>
 
                             <Button
@@ -204,7 +218,7 @@ const categories = [
                         <Typography variant="h6" gutterBottom>
                             Upload Course Videos
                         </Typography>
-                        <ChapterWiseVideoUpload courseId={courseId} />  
+                        <ChapterWiseVideoUpload courseId={courseId} />
                         <Button
                             variant="contained"
                             color="primary"

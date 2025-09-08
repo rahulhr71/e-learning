@@ -10,4 +10,5 @@ API.interceptors.request.use((req) => {
 );
 export const api = API;
 export const fetchCourse = (id) => API.get(`/videos/getvideos/${id}`);
+
 export const fetchCourses = () => API.get("/courses/getcourse");

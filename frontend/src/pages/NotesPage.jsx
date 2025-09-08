@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import {api} from "../api/api";
 export default function NotesPage() {
   const [notes] = useState([
     {
@@ -25,10 +26,26 @@ export default function NotesPage() {
       url:"https://www.codewithharry.com/img/notes/js.webp"
     },
   ]);
+   const [data, setData] = useState([]);
+   useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const response = await api.get("/notes/getnotes")
+        
+        setData(response.data);
+        console.log(response);
+      }
+      catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+    fetchNotes();
+  }, []);
+  
 
   const [search, setSearch] = useState("");
 
-  const filteredNotes = notes.filter(
+  const filteredNotes = data.filter(
     (note) =>
       note.title.toLowerCase().includes(search.toLowerCase()) ||
       note.description.toLowerCase().includes(search.toLowerCase())

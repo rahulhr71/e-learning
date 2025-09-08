@@ -22,6 +22,7 @@ const courseValidation=joi.object({
   discountPrice:joi.number().required(),
   thumbnail:joi.string().required(),
   lessons:joi.number().required(),
+  overview:joi.string().min(10).required(),
 
 })
 module.exports={validationRegister,validateLogin,courseValidation}

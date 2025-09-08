@@ -1,5 +1,6 @@
 import Logo from "../assets/logo.png";
 import search from "../assets/search.png";
+
 import { Link } from "react-router-dom";
 import { useNavbar } from "../context/navbarContext";
 import { useState } from "react";
@@ -20,8 +21,7 @@ export default function Navbar() {
   return (
     <header className="w-full shadow-md bg-white fixed top-0 left-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex justify-between items-center">
-        {/* Logo */}
-        <Link to="/">
+       <Link to="/">
           <img
             src={Logo}
             alt="logo"
@@ -30,7 +30,6 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Desktop Menu */}
         <nav className="hidden md:flex space-x-6 font-Exo font-semibold text-sm">
           {navItems.map((item, index) => (
             <Link
@@ -45,7 +44,6 @@ export default function Navbar() {
             </Link>
           ))}
         </nav>
-
       
         <div className="hidden md:flex items-center space-x-5">
           <div className="flex gap-2 font-Exo font-semibold text-sm">

@@ -9,7 +9,7 @@ exports.uploadVideo = async (req, res) => {
 
     const video = new Video({
       title,
-      url: req.file.path, // Cloudinary se jo URL aata hai
+      url: req.file.path, 
       courseId,
     });
 
