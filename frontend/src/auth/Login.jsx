@@ -22,16 +22,12 @@ export default function Login() {
 
 
     axios.post('http://localhost:4000/api/auth/login',data).then((res) => {
-            if (res.data.success) {
-        setEmail(null)
-        setPassword(null)
-        alert("login success",)
-        document.getElementById('email').value = " "
-        document.getElementById('password').value = ""
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("login user",res.data.email)
-        navigate('/dashboard');
-      }
+            if (res.status === 200) {
+    const user = res.data.user; // backend se aaya hua user object
+    localStorage.setItem("token", res.data.token);
+    setUserC(user); 
+    navigate("/dashboard"); // redirect to dashboard
+  }
 
     }).catch((e) => {
       console.log();
@@ -42,7 +38,7 @@ export default function Login() {
 
   return (
     <>
-      <Navbar />
+      <Navbar /><br /><br /><br />
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img

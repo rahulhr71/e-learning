@@ -4,5 +4,7 @@ router.get('/getcourse',getCourse)
 router.post('/addcourse',addCourse)
 router.put('/update/:id',updateCourse)
 router.delete('/delete/:id',deleteCourse)
+router.get('/search',require('../../controllers/course').searchCourse)
+router.get('/categories',require('../../controllers/course').getCategoriesWithCount)
 
 module.exports=router

@@ -9,9 +9,11 @@ import Contact from './components/Contact';
 import CourseOverview from './pages/CourseOverview';
 import NotesPage from './pages/NotesPage';
 import AboutUs from './pages/About'
+
 function App() {
   return (
     <BrowserRouter>
+  
       <Routes>
         <Route path='/' element={<Homepage />} />
         <Route path='/login' element={<Login/>} />

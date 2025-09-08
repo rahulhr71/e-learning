@@ -58,42 +58,45 @@ const Dashboard = () => {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <Navbar />
+      <Navbar /><br /><br />
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
       {error && <p className="text-red-500 mb-4">{error}</p>}
       {loading ? (
         <p>Loading...</p>
       ) : (
         <div>
-          {userData.map((user, index) => (
-            <div key={user._id || index} className="bg-white shadow-md rounded-lg p-4 mb-4 w-full">
-              <h2 className="text-lg font-semibold mb-2">User {index + 1}</h2>
-              <p className="text-gray-700 mb-1">
-                <strong>Email:</strong> {user.email}
-              </p>
-              {userC === user.email ? (
-                <h1 className="text-green-600 font-bold">
-                  You are logged in as {kuchBhiNahi}
-                </h1>
-              ) : (
-                <h1 className="text-red-600 font-bold">
-                  You are not logged in as {userC}
-                </h1>
-              )}
-              <p className="text-gray-700">
-                <strong>Password:</strong> {user.password}
-              </p>
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2"
-                onClick={()=>handleDeleteUser(user._id)}            
-              >
-                DELETE
-              </button>
-            </div>
-          ))}
-          {userData.length === 0 && (
-            <p className="text-gray-500">No user data available.</p>
-          )}
+          
+          <table className="min-w-full bg-white border border-gray-300">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b border-gray-300 text-left">Email</th>
+                <th className="py-2 px-4 border-b border-gray-300 text-left">Password</th>
+                <th className="py-2 px-4 border-b border-gray-300 text-left">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {userData.map((user) => (
+                <tr key={user._id} className="hover:bg-gray-100">
+
+                  <td className="py-2 px-4 border-b border-gray-300">{user.email}</td>
+                  <td className="py-2 px-4 border-b border-gray-300">{user.password}</td>
+                  <td className="py-2 px-4 border-b border-gray-300">
+                    {kuchBhiNahi === user.email ? (
+                      <button
+                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                        onClick={() => handleDeleteUser(user._id)}
+                      >
+                        Delete
+                      </button>
+                    ) : (
+                      <span className="text-gray-500">N/A</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>x X x
         </div>
       )}
     </div>

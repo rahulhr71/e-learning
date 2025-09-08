@@ -6,42 +6,51 @@ import { useParams } from 'react-router-dom'
 import { thumbnail } from '../assets/thumbnails/thumbnail'
 import { GraduationCap, BarChart2, FileText, BookOpen, Users, Play } from "lucide-react"
 import { fetchCourse } from '../api/api'
-import { Clock, Calendar } from "lucide-react"; // extra icons for duration & date
+import { Clock, Calendar } from "lucide-react"; 
+import Comment from '../components/comment'
+import { useCourse } from '../context/courseContext'
 const CourseOverview = () => {
     const { id } = useParams()
     const [course, setCourse] = useState([])
+    const {courses} = useCourse()
     const [activeLesson, setActiveLesson] = useState(null)
     const [activeTab, setActiveTab] = useState("overview")
     const [video, setVideo] = useState("")
-
+    const [item,setItem]=useState({})
     const handleClick = (url, key) => {
         setActiveLesson(key)
         setVideo(url)
     }
+   useEffect(() => {
+  if (!courses || courses.length === 0) return;
 
-    useEffect(() => {
-        fetchCourse(id)
-            .then(res => {
-                console.log(res.data.videos);
-                
-                const data = res.data.videos
-                console.log(data);
-                
-                setCourse(data)
-                if (data?.lessons?.length > 0) {
-                    const sortedLessons = [...data.lessons].sort((a, b) => a.order - b.order)
-                    sortedLessons.forEach(lesson => {
-                        lesson.children.sort((a, b) => a.order - b.order)
-                    })
-                    setLessons(sortedLessons)
-                    if (sortedLessons[0]?.children?.[0]) {
-                        setVideo(sortedLessons[0].children[0].url)
-                        setActiveLesson(sortedLessons[0].children[0].name)
-                    }
-                }
-            })
-            .catch(err => console.log(err))
-    }, [id])
+  const selectedCourse = courses.find(c => c._id === id);
+  if (selectedCourse) {
+    setItem(selectedCourse);
+    console.log(item);
+    
+  }
+}, [courses, id]);
+
+useEffect(() => {
+  const loadCourse = async () => {
+    try {
+      const res = await fetchCourse(id);
+      const data = res.data.videos || [];
+      setCourse(data);
+
+      if (data?.length > 0) {
+        const sorted = [...data].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        setVideo(sorted[0].url);
+        setActiveLesson(sorted[0]._id);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  loadCourse();
+}, [id]);
+
 
    const items = course.map((video, index) => ({
   key: video._id,
@@ -93,6 +102,7 @@ const CourseOverview = () => {
       >
         <Play size={16} /> {activeLesson === video._id ? "Playing" : "Play"}
       </button>
+      
     </div>
   ),
 }));
@@ -126,22 +136,22 @@ const CourseOverview = () => {
                 <div className='flex flex-col gap-4 lg:w-2/3 w-full'>
                     <div className='flex flex-wrap gap-2 items-center'>
                         <p className='text-white bg-[#555555] p-1 rounded-sm text-xs sm:text-sm'>Category</p>
-                        <h1 className='text-gray-300 text-sm sm:text-base'>by {course.teacher || "Teacher Name"}</h1>
+                        <h1 className='text-gray-300 text-sm sm:text-base'>by {item.teacher || "Teacher Name"}</h1>
                     </div>
-                    <h1 className='text-white font-bold text-xl sm:text-3xl'>{course.title || "Course Title"}</h1>
+                    <h1 className='text-white font-bold text-xl sm:text-3xl'>{item.title || "Course Title"}</h1>
                     <div className="flex flex-wrap gap-3 text-orange-500 text-sm mt-2">
                         <div className="flex items-center gap-1"><span>●</span><span className='text-white'>2 Weeks</span></div>
                         <div className="flex items-center gap-1"><GraduationCap size={16} /><span className='text-white'>156 Students</span></div>
                         <div className="flex items-center gap-1"><BarChart2 size={16} /><span className='text-white'>All levels</span></div>
-                        <div className="flex items-center gap-1"><FileText size={16} /><span className='text-white'>{course.length} Lessons</span></div>
+                        <div className="flex items-center gap-1"><FileText size={16} /><span className='text-white'>{item.lessons} Lessons</span></div>
                         <div className="flex items-center gap-1"><BookOpen size={16} /><span className='text-white'>Quizzes</span></div>
                     </div>
                 </div>
 
                 <div className='flex flex-col items-center gap-2 border rounded-2xl border-gray-400 lg:w-1/3 w-full'>
-                    <img src={thumbnail.i1} alt="" className='w-full lg:w-full rounded-lg' />
+                    <img src={item.thumbnail} alt="" className='w-full lg:w-full rounded-lg' />
                     <div className='flex flex-wrap gap-4 py-3 justify-center'>
-                        <p className='text-white text-sm'><span className='line-through text-gray-500'>₹100</span> ₹70</p>
+                        <p className='text-white text-sm'><span className='line-through text-gray-500'>{item.basePrice}</span> {item.discountPrice}</p>
                         <button className='bg-amber-500 py-1 px-4 cursor-pointer hover:bg-amber-600 rounded-2xl text-white font-medium'>Start Now</button>
                     </div>
                 </div>
@@ -190,7 +200,8 @@ const CourseOverview = () => {
                             ))}
                         </div>
                     )}
-                </div>
+                </div><br /><br />
+                  <Comment/>
             </div>
 
             <Footer />

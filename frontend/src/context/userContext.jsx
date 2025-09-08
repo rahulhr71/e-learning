@@ -1,20 +1,33 @@
-import { createContext, useContext } from 'react';
-const usercontext = createContext();
-import { useState ,useEffect} from "react";
-export const UserProvider = ({ children }) => {
-    const [userC, setUserC] = useState(localStorage.getItem('login user') || null);
-    useEffect(() => {
-         const storedUser = localStorage.getItem('login user');
-         if (storedUser) {
-             setUserC(storedUser);
-         }
-     }, [userC]);
-    localStorage.setItem('login user', userC);
+// context/userContext.js
+import { createContext, useContext, useEffect, useState } from "react";
 
-    return (
-        <usercontext.Provider value={{ userC, setUserC }}>
-            {children}
-        </usercontext.Provider>
-    );
+const UserContext = createContext();
+
+export const UserProvider = ({ children }) => {
+  const [userC, setUserC] = useState(null);
+
+  // 🔹 Page refresh hone par localStorage se user load karo
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUserC(JSON.parse(savedUser));
+    }
+  }, []);
+
+  // 🔹 Jab bhi userC change ho, localStorage update karo
+  useEffect(() => {
+    if (userC) {
+      localStorage.setItem("user", JSON.stringify(userC));
+    } else {
+      localStorage.removeItem("user");
+    }
+  }, [userC]);
+
+  return (
+    <UserContext.Provider value={{ userC, setUserC }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
-export const useUser  = () => useContext(usercontext);
+
+export const useUser = () => useContext(UserContext);

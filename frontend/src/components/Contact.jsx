@@ -6,7 +6,7 @@ import Footer from "./Footer";
 const Contact = () => {
     return (
         <>
-            <Navbar />
+            <Navbar /><br /><br />
             <section className=" font-Exo grid grid-cols-1 md:grid-cols-2 bg-white rounded-2xl overflow-hidden shadow-lg">
 
                 <div className="flex flex-col justify-center p-8 md:p-12 space-y-10   ">
@@ -56,7 +56,7 @@ const Contact = () => {
                 </div>
 
                 {/* Right - Map */}
-                <div className="h-[300px] md:h-auto p-10">
+                <div className="h-[300px] md:h-auto p-10 z-0">
                     <MapComponent />
                 </div>
             </section>

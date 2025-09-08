@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { icons } from '../assets/icons/icon'
 import { thumbnail } from '../assets/thumbnails/thumbnail'
 import { Link } from 'react-router-dom'
-import {fetchCourses} from '../api/api'
 
+import   {useCourse} from '../context/courseContext'
 export default function AllCourses() {
-  const [courses, setCourses] = useState([])
+  const {courses, setCourses} = useCourse()
   
   
     const [categories, setCategories] = useState([
@@ -20,18 +20,17 @@ export default function AllCourses() {
       { name: 'Science', selected: false },
       { name: 'Network', selected: false },
     ])
-useEffect(()=>{
-   const getCourses = async()=>{
-    try {
-      const {data} = await fetchCourses();
-      console.log(data.data);
-      setCourses(data.data)
-    } catch (error) {
-      console.log(error);
-    }
-   }
-    getCourses()
-},[])
+// useEffect(()=>{
+//    const getCourses = async()=>{
+//     try {
+//       const {data} = await fetchCourses();
+//       setCourses(data.data)
+//     } catch (error) {
+//       console.log(error);
+//     }
+//    }
+//     getCourses()
+// },[])
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
 

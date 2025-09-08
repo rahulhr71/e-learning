@@ -1,7 +1,7 @@
 import React from "react";
 import image from "../assets/frame4.png";
 import image2 from "../assets/studentImage.png";
-
+import { Link } from "react-router-dom";
 export default function Frame4() {
   return (
     <div className="px-4 w-3/4 mx-auto sm:px-6 lg:px-0">
@@ -24,9 +24,11 @@ export default function Frame4() {
 
         {/* Right Buttons */}
         <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0 z-10 sm:mr-5">
+          <Link to='/register'>
           <button className="border-2 cursor-pointer rounded-3xl text-sm font-medium py-2 px-5 hover:bg-gray-100 transition">
             I'm A Student
           </button>
+          </Link>
           <button className="bg-amber-600 py-2 px-5 rounded-3xl text-white cursor-pointer hover:bg-amber-500 text-sm font-medium transition">
             Become An Instructor
           </button>

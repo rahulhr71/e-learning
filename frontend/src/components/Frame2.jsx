@@ -1,6 +1,6 @@
 import React from 'react'
 import image from '../assets/frame2.png'
-
+import {Link} from 'react-router-dom'
 export default function Frame2() {
   return (
     <div className="w-[90%] md:w-[72%] m-auto rounded-md py-8">
@@ -27,10 +27,11 @@ export default function Frame2() {
             <p>✅ Expert Mentors</p>
             <p>✅ Flexible Learning</p>
           </div>
-
+<Link to="/courses">
           <button className="m-2 bg-amber-600 py-2 px-5 rounded-3xl text-white cursor-pointer hover:bg-amber-500 text-sm font-medium">
             Explore Course
           </button>
+          </Link>
         </div>
       </div>
     </div>

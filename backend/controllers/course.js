@@ -18,11 +18,35 @@ const addCourse = async (req, res) => {
         res.status(300).json({ message: e.message })
     }
 }
+const searchCourse = async (req, res) => {
+    try {
+        const { search } = req.query;
+
+        if (!search) {
+            return res.status(400).json({ message: "Search query is required" });
+        }
+
+
+        const filter = {
+            $or: [
+                { name: { $regex: search, $options: "i" } },
+                { teacher: { $regex: search, $options: "i" } },
+                { category: { $regex: search, $options: "i" } }
+            ]
+        };
+
+        const data = await Course.find(filter);
+
+        res.status(200).json({ data });
+    }
+    catch (e) {
+        res.status(500).json({ message: e.message });
+    }
+};
+
 const getCourse = async (req, res) => {
     try {
-        console.log("get course api called");
-
-        const data = await Course.find({})
+               const data = await Course.find({})
         res.status(200).json({ data });
     }
     catch (e) {
@@ -55,5 +79,57 @@ const deleteCourse = async (req, res) => {
         res.status(500).json({ message: e.message })
     }
 }
+const getCategoriesWithCount = async (req, res) => {
+  try {
 
-module.exports = { addCourse, getCourse, updateCourse, deleteCourse }
+    const masterCategories = [
+      "Art & Design",
+      "Development",
+      "Communication",
+      "VideoGrapgy",
+      "Photography",
+      "Marketing",
+      "Content Writing",
+      "Finance",
+      "Science",
+      "Network"
+    ];
+
+
+    const counts = await Course.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          count: 1
+        }
+      }
+    ]);
+
+
+    const countsMap = {};
+    counts.forEach(c => {
+      countsMap[c.category] = c.count;
+    });
+
+ 
+    const data = masterCategories.map(cat => ({
+      category: cat,
+      count: countsMap[cat] || 0
+    }));
+
+    res.status(200).json({ data });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
+
+
+
+module.exports = { addCourse, getCourse, updateCourse, deleteCourse ,searchCourse,getCategoriesWithCount};

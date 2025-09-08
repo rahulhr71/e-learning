@@ -15,7 +15,7 @@ export default function AboutUs() {
 
   return (
     <>
-   <Navbar/>
+   <Navbar/><br /><br />
     <div className="min-h-screen bg-gray-50 p-6 md:p-12">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
