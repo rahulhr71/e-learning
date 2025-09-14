@@ -6,7 +6,7 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [userC, setUserC] = useState(null);
 
-  // 🔹 Page refresh hone par localStorage se user load karo
+ 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
-  // 🔹 Jab bhi userC change ho, localStorage update karo
+  
   useEffect(() => {
     if (userC) {
       localStorage.setItem("user", JSON.stringify(userC));

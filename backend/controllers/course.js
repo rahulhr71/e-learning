@@ -46,7 +46,7 @@ const searchCourse = async (req, res) => {
 
 const getCourse = async (req, res) => {
     try {
-               const data = await Course.find({})
+          const data = await Course.find({})
         res.status(200).json({ data });
     }
     catch (e) {

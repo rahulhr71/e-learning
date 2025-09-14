@@ -96,7 +96,7 @@ const Dashboard = () => {
                 </tr>
               ))}
             </tbody>
-          </table>x X x
+          </table>
         </div>
       )}
     </div>
