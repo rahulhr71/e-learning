@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debouncing Examples</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .example-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .example-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .example-title {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .counter {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .api-calls {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .debounced-calls {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #a0aec0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            color: #68d391;
+            font-weight: bold;
+        }
+        
+        .explanation {
+            background: #e6f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .benefit {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border-left: 3px solid #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 JavaScript Debouncing Guide</h1>
+        
+        <!-- Basic Debouncing Example -->
+        <div class="example-card">
+            <h2 class="example-title">1. Basic Debouncing Example</h2>
+            
+            <div class="explanation">
+                <h3>Debouncing क्या है?</h3>
+                <p><strong>Debouncing</strong> एक technique है जो function को तब तक execute नहीं करती जब तक user कुछ समय (delay) तक input देना बंद न कर दे।</p>
+                <br>
+                <p><strong>Real Life Example:</strong> जैसे elevator में button दबाने के बाद कुछ seconds wait करता है कि कोई और floor select करे या नहीं।</p>
+            </div>
+            
+            <div class="input-group">
+                <label><strong>Normal Input (Without Debouncing):</strong></label>
+                <input type="text" id="normalInput" placeholder="Type something...">
+            </div>
+            
+            <div class="input-group">
+                <label><strong>Debounced Input (500ms delay):</strong></label>
+                <input type="text" id="debouncedInput" placeholder="Type something...">
+            </div>
+            
+            <div class="counter">
+                <div>Normal API Calls: <span class="api-calls" id="normalCount">0</span></div>
+                <div>Debounced API Calls: <span class="debounced-calls" id="debouncedCount">0</span></div>
+            </div>
+            
+            <div class="code-block">
+<span class="highlight">// Simple Debounce Function</span>
+function debounce(func, delay) {
+    let timeoutId;
+    
+    return function(...args) {
+        // Previous timeout को clear करें
+        clearTimeout(timeoutId);
+        
+        // New timeout set करें
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
+
+<span class="highlight">// Usage</span>
+const debouncedSearch = debounce(searchAPI, 500);
+
+// User typing पर:
+input.addEventListener('input', debouncedSearch);
+            </div>
+        </div>
+        
+        <!-- Search Example -->
+        <div class="example-card">
+            <h2 class="example-title">2. Real Search Example</h2>
+            
+            <div class="input-group">
+                <input type="text" id="searchInput" placeholder="Search movies... (try typing 'batman')">
+            </div>
+            
+            <div class="counter">
+                <div>Search Calls Made: <span class="api-calls" id="searchCount">0</span></div>
+            </div>
+            
+            <div id="searchResults" style="margin-top: 15px;"></div>
+            
+            <div class="code-block">
+<span class="highlight">// Search API Function</span>
+function searchMovies(query) {
+    if (!query) return;
+    
+    console.log(`🔍 Searching for: ${query}`);
+    
+    // Fake API call simulation
+    setTimeout(() => {
+        displayResults(`Results for "${query}"`);
+    }, 300);
+}
+
+<span class="highlight">// Debounced search (300ms delay)</span>
+const debouncedMovieSearch = debounce(searchMovies, 300);
+
+<span class="highlight">// Event listener</span>
+searchInput.addEventListener('input', (e) => {
+    debouncedMovieSearch(e.target.value);
+});
+            </div>
+        </div>
+        
+        <!-- Button Click Example -->
+        <div class="example-card">
+            <h2 class="example-title">3. Button Click Debouncing</h2>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <button id="normalBtn" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Normal Button
+                </button>
+                
+                <button id="debouncedBtn" style="padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Debounced Button
+                </button>
+            </div>
+            
+            <div class="counter">
+                <div>Normal Button Clicks: <span class="api-calls" id="normalBtnCount">0</span></div>
+                <div>Debounced Button Clicks: <span class="debounced-calls" id="debouncedBtnCount">0</span></div>
+            </div>
+            
+            <div class="code-block">
+<span class="highlight">// Button click handler</span>
+function handleButtonClick() {
+    console.log('💾 Saving data...');
+    // API call simulation
+}
+
+<span class="highlight">// Debounced button click (1 second)</span>
+const debouncedButtonClick = debounce(handleButtonClick, 1000);
+
+normalBtn.addEventListener('click', handleButtonClick);
+debouncedBtn.addEventListener('click', debouncedButtonClick);
+            </div>
+        </div>
+        
+        <!-- Benefits -->
+        <div class="example-card">
+            <h2 class="example-title">4. Debouncing के फायदे</h2>
+            
+            <div class="benefit">
+                <strong>🚀 Performance:</strong> Unnecessary API calls कम हो जाती हैं
+            </div>
+            
+            <div class="benefit">
+                <strong>💰 Cost Saving:</strong> Server resources और API costs बचती हैं
+            </div>
+            
+            <div class="benefit">
+                <strong>⚡ Better UX:</strong> User experience smooth रहता है
+            </div>
+            
+            <div class="benefit">
+                <strong>🌐 Network:</strong> Network traffic कम होता है
+            </div>
+            
+            <div class="code-block">
+<span class="highlight">// Common Use Cases:</span>
+
+1. <strong>Search Box:</strong> User typing के दौरान
+2. <strong>API Calls:</strong> Form validation में  
+3. <strong>Button Clicks:</strong> Double-click prevention
+4. <strong>Scroll Events:</strong> Infinite scrolling में
+5. <strong>Resize Events:</strong> Window resize के दौरान
+
+<span class="highlight">// Advanced Debouncing with immediate execution:</span>
+function debounce(func, delay, immediate = false) {
+    let timeoutId;
+    
+    return function(...args) {
+        const callNow = immediate && !timeoutId;
+        
+        clearTimeout(timeoutId);
+        
+        timeoutId = setTimeout(() => {
+            timeoutId = null;
+            if (!immediate) func.apply(this, args);
+        }, delay);
+        
+        if (callNow) func.apply(this, args);
+    };
+}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Counters
+        let normalCounter = 0;
+        let debouncedCounter = 0;
+        let searchCounter = 0;
+        let normalBtnCounter = 0;
+        let debouncedBtnCounter = 0;
+
+        // Debounce function
+        function debounce(func, delay) {
+            let timeoutId;
+            
+            return function(...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        }
+
+        // Basic Input Examples
+        const normalInput = document.getElementById('normalInput');
+        const debouncedInput = document.getElementById('debouncedInput');
+
+        function normalApiCall() {
+            normalCounter++;
+            document.getElementById('normalCount').textContent = normalCounter;
+        }
+
+        function debouncedApiCall() {
+            debouncedCounter++;
+            document.getElementById('debouncedCount').textContent = debouncedCounter;
+        }
+
+        const debouncedAPI = debounce(debouncedApiCall, 500);
+
+        normalInput.addEventListener('input', normalApiCall);
+        debouncedInput.addEventListener('input', debouncedAPI);
+
+        // Search Example
+        const searchInput = document.getElementById('searchInput');
+        
+        function searchMovies(query) {
+            if (!query.trim()) {
+                document.getElementById('searchResults').innerHTML = '';
+                return;
+            }
+            
+            searchCounter++;
+            document.getElementById('searchCount').textContent = searchCounter;
+            
+            console.log(`🔍 Searching for: ${query}`);
+            
+            // Simulate API response
+            setTimeout(() => {
+                const results = document.getElementById('searchResults');
+                results.innerHTML = `
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #3498db;">
+                        <strong>Search Results for "${query}":</strong><br>
+                        🎬 ${query} (2022)<br>
+                        🎬 ${query} Returns (2023)<br>
+                        🎬 The ${query} Chronicles (2021)
+                    </div>
+                `;
+            }, 100);
+        }
+
+        const debouncedMovieSearch = debounce(searchMovies, 300);
+        searchInput.addEventListener('input', (e) => {
+            debouncedMovieSearch(e.target.value);
+        });
+
+        // Button Examples
+        const normalBtn = document.getElementById('normalBtn');
+        const debouncedBtn = document.getElementById('debouncedBtn');
+
+        function normalButtonClick() {
+            normalBtnCounter++;
+            document.getElementById('normalBtnCount').textContent = normalBtnCounter;
+            console.log('Normal button clicked');
+        }
+
+        function debouncedButtonClick() {
+            debouncedBtnCounter++;
+            document.getElementById('debouncedBtnCount').textContent = debouncedBtnCounter;
+            console.log('Debounced button clicked');
+        }
+
+        const debouncedBtnClick = debounce(debouncedButtonClick, 1000);
+
+        normalBtn.addEventListener('click', normalButtonClick);
+        debouncedBtn.addEventListener('click', debouncedBtnClick);
+    </script>
+</body>
+</html>

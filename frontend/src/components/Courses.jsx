@@ -30,7 +30,7 @@ export default function Courses() {
     fetchEnrolledCourses();
   }, [user, setEnrolledCourses]);
 
-  // ✅ Search filter
+ 
   useEffect(() => {
     const fetchSearch = async () => {
       try {
@@ -48,7 +48,7 @@ export default function Courses() {
 
     const delayDebounce = setTimeout(() => {
       fetchSearch();
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(delayDebounce);
   }, [searchTerm, courses]);

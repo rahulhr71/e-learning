@@ -38,7 +38,7 @@ export default function AddCourse() {
         category: "",
         teacher: "",
         weeks: "",
-        students: "",
+        students:0, 
         basePrice: "",
         discountPrice: "",
         thumbnail: "",
@@ -70,7 +70,7 @@ export default function AddCourse() {
                     category: "",
                     teacher: "",
                     weeks: "",
-                    students: "",
+                    students: 0,
                     basePrice: "",
                     discountPrice: "",
                     thumbnail: "",
@@ -149,13 +149,7 @@ export default function AddCourse() {
                                     value={newCourse.weeks}
                                     onChange={handleChange}
                                 />
-                                <TextField
-                                    type="number"
-                                    label="Students"
-                                    name="students"
-                                    value={newCourse.students}
-                                    onChange={handleChange}
-                                />
+                               
                                 <TextField
                                     type="number"
                                     label="Base Price"

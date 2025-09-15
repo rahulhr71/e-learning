@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB Lookup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.8rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-3px);
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .explanation {
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #3498db;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        .code-title {
+            background: #333;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 5px 5px 0 0;
+            font-size: 12px;
+            font-weight: bold;
+            margin: -25px -25px 15px -25px;
+        }
+        
+        .highlight {
+            color: #4ec9b0;
+            font-weight: bold;
+        }
+        
+        .keyword {
+            color: #569cd6;
+        }
+        
+        .string {
+            color: #ce9178;
+        }
+        
+        .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .collection-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .collection-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .collection-title {
+            color: #495057;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+            background: #e9ecef;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        
+        .document {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 8px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .result-box {
+            background: #d1ecf1;
+            border: 2px solid #bee5eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .result-title {
+            color: #0c5460;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 2rem;
+            color: #e74c3c;
+            margin: 10px 0;
+        }
+        
+        .interactive-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .interactive-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 5px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .emoji {
+            font-size: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .collection-demo {
+                grid-template-columns: 1fr;
+            }
+            
+            .code-block {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">🍃</span> MongoDB Lookup Complete Guide</h1>
+        
+        <!-- Introduction -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="emoji">📚</span>
+                Lookup क्या है?
+            </h2>
+            
+            <div class="explanation">
+                <h3>MongoDB $lookup:</h3>
+                <p><strong>$lookup</strong> MongoDB का aggregation stage है जो SQL की <strong>JOIN</strong> के समान काम करता है। यह दो या ज्यादा collections को connect करके data को combine करता है।</p>
+                <br>
+                <p><strong>Real Life Example:</strong> जैसे आपके पास Users की list है और Orders की अलग list है, तो $lookup से आप देख सकते हैं कि कौन से user ने कौन से orders दिए हैं।</p>
+            </div>
+
+            <div class="code-block">
+                <div class="code-title">Basic Lookup Syntax</div>
+<span class="comment">// Basic $lookup syntax</span>
+db.collection.aggregate([
+  {
+    <span class="keyword">$lookup</span>: {
+      <span class="highlight">from</span>: <span class="string">"targetCollection"</span>,        <span class="comment">// जिस collection से join करना है</span>
+      <span class="highlight">localField</span>: <span class="string">"localFieldName"</span>,     <span class="comment">// current collection का field</span>
+      <span class="highlight">foreignField</span>: <span class="string">"foreignFieldName"</span>, <span class="comment">// target collection का field</span>
+      <span class="highlight">as</span>: <span class="string">"resultArrayName"</span>             <span class="comment">// result में array का naam</span>
+    }
+  }
+])
+            </div>
+        </div>
+
+        <!-- Sample Data Setup -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="emoji">🗄️</span>
+                Sample Collections
+            </h2>
+            
+            <div class="collection-demo">
+                <div class="collection-box">
+                    <div class="collection-title">👥 Users Collection</div>
+                    <div class="document">
+                        {<br>
+                        &nbsp;&nbsp;_id: ObjectId("1"),<br>
+                        &nbsp;&nbsp;name: "Rahul",<br>
+                        &nbsp;&nbsp;email: "rahul@email.com",<br>
+                        &nbsp;&nbsp;city: "Delhi"<br>
+                        }
+                    </div>
+                    <div class="document">
+                        {<br>
+                        &nbsp;&nbsp;_id: ObjectId("2"),<br>
+                        &nbsp;&nbsp;name: "Priya",<br>
+                        &nbsp;&nbsp;email: "priya@email.com",<br>
+                        &nbsp;&nbsp;city: "Mumbai"<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="collection-box">
+                    <div class="collection-title">🛒 Orders Collection</div>
+                    <div class="document">
+                        {<br>
+                        &nbsp;&nbsp;_id: ObjectId("101"),<br>
+                        &nbsp;&nbsp;userId: ObjectId("1"),<br>
+                        &nbsp;&nbsp;product: "Laptop",<br>
+                        &nbsp;&nbsp;amount: 50000<br>
+                        }
+                    </div>
+                    <div class="document">
+                        {<br>
+                        &nbsp;&nbsp;_id: ObjectId("102"),<br>
+                        &nbsp;&nbsp;userId: ObjectId("1"),<br>
+                        &nbsp;&nbsp;product: "Mouse",<br>
+                        &nbsp;&nbsp;amount: 1000<br>
+                        }
+                    </div>
+                    <div class="document">
+                        {<br>
+                        &nbsp;&nbsp;_id: ObjectId("103"),<br>
+                        &nbsp;&nbsp;userId: ObjectId("2"),<br>
+                        &nbsp;&nbsp;product: "Phone",<br>
+                        &nbsp;&nbsp;amount: 25000<br>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Examples -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="emoji">🎯</span>
+                Interactive Lookup Examples
+            </h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('basic')">Basic Lookup</button>
+                <button class="tab" onclick="showTab('pipeline')">With Pipeline</button>
+                <button class="tab" onclick="showTab('multiple')">Multiple Lookups</button>
+                <button class="tab" onclick="showTab('unwind')">With Unwind</button>
+            </div>
+
+            <!-- Basic Lookup -->
+            <div id="basic" class="tab-content active">
+                <h3>1. Basic Lookup - Users के साथ उनके Orders</h3>
+                
+                <div class="code-block">
+                    <div class="code-title">Query</div>
+<span class="comment">// सभी users के साथ उनके orders find करें</span>
+db.users.aggregate([
+  {
+    <span class="keyword">$lookup</span>: {
+      <span class="highlight">from</span>: <span class="string">"orders"</span>,           <span class="comment">// orders collection से join</span>
+      <span class="highlight">localField</span>: <span class="string">"_id"</span>,       <span class="comment">// users की _id</span>
+      <span class="highlight">foreignField</span>: <span class="string">"userId"</span>,  <span class="comment">// orders की userId</span>
+      <span class="highlight">as</span>: <span class="string">"userOrders"</span>          <span class="comment">// result array का naam</span>
+    }
+  }
+])
+                </div>
+                
+                <button class="interactive-btn" onclick="runBasicLookup()">🚀 Run Basic Lookup</button>
+                
+                <div id="basicResult" class="result-box" style="display: none;">
+                    <div class="result-title">📊 Result:</div>
+                    <div id="basicResultContent"></div>
+                </div>
+            </div>
+
+            <!-- Pipeline Lookup -->
+            <div id="pipeline" class="tab-content">
+                <h3>2. Lookup with Pipeline - Advanced Filtering</h3>
+                
+                <div class="code-block">
+                    <div class="code-title">Query with Pipeline</div>
+<span class="comment">// Users के साथ केवल 10000 से ज्यादा amount के orders</span>
+db.users.aggregate([
+  {
+    <span class="keyword">$lookup</span>: {
+      <span class="highlight">from</span>: <span class="string">"orders"</span>,
+      <span class="highlight">let</span>: { <span class="string">"user_id"</span>: <span class="string">"$_id"</span> },       <span class="comment">// variable define करें</span>
+      <span class="highlight">pipeline</span>: [                             <span class="comment">// custom pipeline</span>
+        {
+          <span class="keyword">$match</span>: {
+            <span class="keyword">$expr</span>: {
+              <span class="keyword">$and</span>: [
+                { <span class="keyword">$eq</span>: [<span class="string">"$userId"</span>, <span class="string">"$$user_id"</span>] },
+                { <span class="keyword">$gt</span>: [<span class="string">"$amount"</span>, 10000] }       <span class="comment">// amount > 10000</span>
+              ]
+            }
+          }
+        },
+        {
+          <span class="keyword">$project</span>: {                          <span class="comment">// केवल specific fields</span>
+            <span class="string">product</span>: 1,
+            <span class="string">amount</span>: 1,
+            <span class="string">_id</span>: 0
+          }
+        }
+      ],
+      <span class="highlight">as</span>: <span class="string">"expensiveOrders"</span>
+    }
+  }
+])
+                </div>
+                
+                <button class="interactive-btn" onclick="runPipelineLookup()">🚀 Run Pipeline Lookup</button>
+                
+                <div id="pipelineResult" class="result-box" style="display: none;">
+                    <div class="result-title">📊 Result:</div>
+                    <div id="pipelineResultContent"></div>
+                </div>
+            </div>
+
+            <!-- Multiple Lookups -->
+            <div id="multiple" class="tab-content">
+                <h3>3. Multiple Lookups - एक से ज्यादा Collections</h3>
+                
+                <div class="code-block">
+                    <div class="code-title">Multiple Collections Join</div>
+<span class="comment">// Users + Orders + Categories (तीन collections join)</span>
+db.users.aggregate([
+  {
+    <span class="comment">// पहली lookup - Orders</span>
+    <span class="keyword">$lookup</span>: {
+      <span class="highlight">from</span>: <span class="string">"orders"</span>,
+      <span class="highlight">localField</span>: <span class="string">"_id"</span>,
+      <span class="highlight">foreignField</span>: <span class="string">"userId"</span>,
+      <span class="highlight">as</span>: <span class="string">"orders"</span>
+    }
+  },
+  {
+    <span class="comment">// दूसरी lookup - Categories</span>
+    <span class="keyword">$lookup</span>: {
+      <span class="highlight">from</span>: <span class="string">"categories"</span>,
+      <span class="highlight">localField</span>: <span class="string">"orders.categoryId"</span>,
+      <span class="highlight">foreignField</span>: <span class="string">"_id"</span>,
+      <span class="highlight">as</span>: <span class="string">"categories"</span>
+    }
+  },
+  {
+    <span class="keyword">$project</span>: {
+      <span class="string">name</span>: 1,
+      <span class="string">email</span>: 1,
+      <span class="string">totalOrders</span>: { <span class="keyword">$size</span>: <span class="string">"$orders"</span> },
+      <span class="string">orders</span>: 1,
+      <span class="string">categories</span>: 1
+    }
+  }
+])
+                </div>
+                
+                <button class="interactive-btn" onclick="runMultipleLookup()">🚀 Run Multiple Lookups</button>
+                
+                <div id="multipleResult" class="result-box" style="display: none;">
+                    <div class="result-title">📊 Result:</div>
+                    <div id="multipleResultContent"></div>
+                </div>
+            </div>
+
+            <!-- Unwind -->
+            <div id="unwind" class="tab-content">
+                <h3>4. Lookup + Unwind - Array को Flatten करें</h3>
+                
+                <div class="code-block">
+                    <div class="code-title">Lookup with $unwind</div>
+<span class="comment">// हर order को अलग document बनाएं</span>
+db.users.aggregate([
+  {
+    <span class="keyword">$lookup</span>: {
+      <span class="highlight">from</span>: <span class="string">"orders"</span>,
+      <span class="highlight">localField</span>: <span class="string">"_id"</span>,
+      <span class="highlight">foreignField</span>: <span class="string">"userId"</span>,
+      <span class="highlight">as</span>: <span class="string">"orders"</span>
+    }
+  },
+  {
+    <span class="keyword">$unwind</span>: <span class="string">"$orders"</span>              <span class="comment">// array को separate documents में convert</span>
+  },
+  {
+    <span class="keyword">$project</span>: {
+      <span class="string">userName</span>: <span class="string">"$name"</span>,
+      <span class="string">userEmail</span>: <span class="string">"$email"</span>,
+      <span class="string">orderId</span>: <span class="string">"$orders._id"</span>,
+      <span class="string">product</span>: <span class="string">"$orders.product"</span>,
+      <span class="string">amount</span>: <span class="string">"$orders.amount"</span>
+    }
+  }
+])
+                </div>
+                
+                <button class="interactive-btn" onclick="runUnwindLookup()">🚀 Run Unwind Lookup</button>
+                
+                <div id="unwindResult" class="result-box" style="display: none;">
+                    <div class="result-title">📊 Result:</div>
+                    <div id="unwindResultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Patterns -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="emoji">🔥</span>
+                Common Use Cases & Patterns
+            </h2>
+            
+            <div class="explanation">
+                <h3>कब use करें $lookup:</h3>
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>🛒 E-commerce:</strong> Users के साथ उनके orders, products</li>
+                    <li><strong>📝 Blog:</strong> Posts के साथ comments, authors</li>
+                    <li><strong>🏢 Employee:</strong> Departments के साथ employees</li>
+                    <li><strong>📚 School:</strong> Students के साथ courses, grades</li>
+                    <li><strong>🏥 Hospital:</strong> Patients के साथ appointments, doctors</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <div class="code-title">Performance Tips</div>
+<span class="comment">// 1. हमेशा indexed fields पर join करें</span>
+db.orders.createIndex({ "userId": 1 })
+
+<span class="comment">// 2. $match को $lookup से पहले use करें</span>
+db.users.aggregate([
+  { <span class="keyword">$match</span>: { <span class="string">"city"</span>: <span class="string">"Delhi"</span> } },        <span class="comment">// पहले filter करें</span>
+  { <span class="keyword">$lookup</span>: { ... } }                    <span class="comment">// फिर lookup करें</span>
+])
+
+<span class="comment">// 3. $project का use करके unnecessary fields remove करें</span>
+db.users.aggregate([
+  { <span class="keyword">$lookup</span>: { ... } },
+  { 
+    <span class="keyword">$project</span>: { 
+      <span class="string">name</span>: 1, 
+      <span class="string">orders.product</span>: 1,      <span class="comment">// केवल जरूरी fields</span>
+      <span class="string">orders.amount</span>: 1 
+    } 
+  }
+])
+
+<span class="comment">// 4. $limit का use करें बड़े datasets के लिए</span>
+db.users.aggregate([
+  { <span class="keyword">$lookup</span>: { ... } },
+  { <span class="keyword">$limit</span>: 10 }                         <span class="comment">// limit results</span>
+])
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="emoji">✨</span>
+                Lookup के फायदे
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; border-left: 4px solid #27ae60;">
+                    <strong>🚀 Single Query:</strong> एक ही query में multiple collections का data
+                </div>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <strong>⚡ Performance:</strong> Database level पर join होता है
+                </div>
+                
+                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                    <strong>🔧 Flexible:</strong> Complex conditions और filtering possible
+                </div>
+                
+                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                    <strong>📊 Rich Data:</strong> Complete information एक साथ मिलता है
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const users = [
+            { _id: "1", name: "Rahul", email: "rahul@email.com", city: "Delhi" },
+            { _id: "2", name: "Priya", email: "priya@email.com", city: "Mumbai" }
+        ];
+
+        const orders = [
+            { _id: "101", userId: "1", product: "Laptop", amount: 50000 },
+            { _id: "102", userId: "1", product: "Mouse", amount: 1000 },
+            { _id: "103", userId: "2", product: "Phone", amount: 25000 }
+        ];
+
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const tabButtons = document.querySelectorAll('.tab');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function runBasicLookup() {
+            const result = users.map(user => ({
+                ...user,
+                userOrders: orders.filter(order => order.userId === user._id)
+            }));
+            
+            document.getElementById('basicResult').style.display = 'block';
+            document.getElementById('basicResultContent').innerHTML = 
+                '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+        }
+
+        function runPipelineLookup() {
+            const result = users.map(user => ({
+                ...user,
+                expensiveOrders: orders
+                    .filter(order => order.userId === user._id && order.amount > 10000)
+                    .map(order => ({ product: order.product, amount: order.amount }))
+            }));
+            
+            document.getElementById('pipelineResult').style.display = 'block';
+            document.getElementById('pipelineResultContent').innerHTML = 
+                '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+        }
+
+        function runMultipleLookup() {
+            const result = users.map(user => ({
+                ...user,
+                totalOrders: orders.filter(order => order.userId === user._id).length,
+                orders: orders.filter(order => order.userId === user._id),
+                categories: ["Electronics", "Accessories"] // Sample categories
+            }));
+            
+            document.getElementById('multipleResult').style.display = 'block';
+            document.getElementById('multipleResultContent').innerHTML = 
+                '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+        }
+
+        function runUnwindLookup() {
+            const result = [];
+            users.forEach(user => {
+                const userOrders = orders.filter(order => order.userId === user._id);
+                userOrders.forEach(order => {
+                    result.push({
+                        userName: user.name,
+                        userEmail: user.email,
+                        orderId: order._id,
+                        product: order.product,
+                        amount: order.amount
+                    });
+                });
+            });
+            
+            document.getElementById('unwindResult').style.display = 'block';
+            document.getElementById('unwindResultContent').innerHTML = 
+                '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+        }
+    </script>
+</body>
+</html>

@@ -10,17 +10,18 @@ app.use(express.json());
 
 const PORT = 5000;
 
-
+// Endpoint to download video
 app.post('/download', (req, res) => {
   const { url } = req.body;
   if (!url) {
     return res.status(400).json({ error: 'No URL provided' });
   }
 
- 
+  // Generate a unique filename
   const filename = `video_${Date.now()}.mp4`;
   const filepath = path.resolve(__dirname, filename);
 
+  // Spawn yt-dlp process to download video
   const ytdlp = spawn('yt-dlp', ['-f', 'mp4', '-o', filepath, url]);
 
   ytdlp.stdout.on('data', (data) => {
@@ -33,13 +34,13 @@ app.post('/download', (req, res) => {
 
   ytdlp.on('close', (code) => {
     if (code === 0) {
-
+      // Send the file to client
       res.download(filepath, (err) => {
         if (err) {
           console.error('Error sending file:', err);
           res.status(500).send('Error sending file');
         }
-       
+        // Delete file after sending
         fs.unlink(filepath, (err) => {
           if (err) console.error('Error deleting file:', err);
         });

@@ -4,12 +4,12 @@ import Login from "./pages/Login";
 
 function App() {
   const ProtectedRoute = ({ children }) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken");
     if (!token) {
-      // if no token, redirect to login
+     
       return <Login />;
     }
-    return children; // if token exists, allow access
+    return children; 
   };
 
   return (
@@ -24,6 +24,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+       <Route path="*" element={ <div>404 not Fount</div>}/>
       </Routes>
     </>
   );

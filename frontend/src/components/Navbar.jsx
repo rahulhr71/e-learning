@@ -1,13 +1,13 @@
 import Logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useNavbar } from "../context/navbarContext";
-import { useUser } from "../context/userContext"; // 👈 user context
+import { useAuth } from "../context/userContext"; // 👈 user context
 import { useState, useEffect, useRef } from "react";
 import { Menu, X, User, ChevronDown } from "lucide-react";
 
 export default function Navbar() {
   const { active, setActive } = useNavbar();
-  const { userC, setUserC } = useUser();
+  const { userC, setUserC } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const navigate = useNavigate();
@@ -121,13 +121,7 @@ export default function Navbar() {
                     </p>
                   </div>
                   
-                  <Link
-                    to="/dashboard"
-                    className="block px-4 py-3 hover:bg-gray-100 transition-colors duration-200 text-sm"
-                    onClick={() => setDropdown(false)}
-                  >
-                    📊 Dashboard
-                  </Link>
+                  
                   
                   <Link
                     to="/enrolled-courses"

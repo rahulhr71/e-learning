@@ -37,8 +37,8 @@ const getEnrolledCourses = async (req, res) => {
     }
 
     const courses = await Enrollment.find({ userId })
-      .populate("courseId") 
-      .populate("userId", "email"); 
+    .populate("courseId") 
+    .populate("userId", "email"); 
 
     res.json({
       count: courses.length,

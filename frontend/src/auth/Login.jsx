@@ -3,11 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import axios from 'axios'
 import Navbar from '../components/Navbar'
-import { useUser } from "../context/userContext"
+import { useAuth } from "../context/userContext"
 import { Eye, EyeOff, Loader2, AlertCircle, CheckCircle } from 'lucide-react'
 
 export default function Login() {
-  const { userC, setUserC } = useUser()
+  const { userC, setUserC } = useAuth()
   const navigate = useNavigate()
   
   // Form states

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Collapse } from 'antd'
-import { useParams } from 'react-router-dom'
+import { useParams ,useNavigate} from 'react-router-dom'
 import { thumbnail } from '../assets/thumbnails/thumbnail'
 import { GraduationCap, BarChart2, FileText, BookOpen, Users, Play, CheckCircle } from "lucide-react"
 import { fetchCourse } from '../api/api'
@@ -10,7 +10,9 @@ import { Clock, Calendar } from "lucide-react";
 import Comment from '../components/comment'
 import { useCourse } from '../context/courseContext'
 import { api } from '../api/api'
+import { Link } from 'react-router-dom'
 const CourseOverview = () => {
+  const navigate=useNavigate()
   const { id } = useParams()
   const [course, setCourse] = useState([])
   const { courses, loading, error, enrolledCourses, setEnrolledCourses, user } = useCourse();
@@ -69,7 +71,9 @@ const CourseOverview = () => {
     };
     fetchEnrolledCourses();
   }, [user, setEnrolledCourses]);
-
+const isEnrolled = enrolledCourses.some(
+  (c) => (c.courseId?._id || c._id) === id
+);
   const items = course.map((video, index) => ({
     key: video._id,
     label: (
@@ -113,8 +117,13 @@ const CourseOverview = () => {
 
         {/* Play Button */}
         <button
-          onClick={() => handleClick(video.url, video._id)}
-          className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-1.5 rounded-md hover:bg-indigo-700 transition text-sm mt-3 sm:mt-0"
+          onClick={() => {
+            if(!isEnrolled){
+              return alert("Please Enroll in Course")
+            }
+            handleClick(video.url, video._id)
+          }}
+          className={`flex items-center gap-2  bg-indigo-600 text-white px-4 py-1.5 rounded-md hover:bg-indigo-700 transition text-sm mt-3 sm:mt-0`}
         >
           <Play size={16} /> {activeLesson === video._id ? "Playing" : "Play"}
         </button>
@@ -141,6 +150,7 @@ const CourseOverview = () => {
     try{
       if (!user) {
         alert("Please log in to start the course.");
+        navigate('/login')
         return;
       }
       const response = await api.post('courses/enroll', { userId: user.id, courseId: id });
@@ -157,9 +167,7 @@ const CourseOverview = () => {
     
 
   }
-  const isEnrolled = enrolledCourses.some(
-  (c) => (c.courseId?._id || c._id) === id
-);
+  
   console.log(isEnrolled);
   
   return (
@@ -196,10 +204,12 @@ const CourseOverview = () => {
             <p className='text-white text-sm'><span className='line-through text-gray-500'>{item.basePrice}</span> {item.discountPrice}</p>
             
             {isEnrolled && (
-              <div className=" bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                <CheckCircle className="w-4 h-4" />
-                Enrolled
+              <Link to={`/view-Course/${id}`} >
+              <div className="cursor-pointer   bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+               
+                View
               </div>
+              </Link>
             ) ||  <button className='bg-amber-500 py-1 px-4 cursor-pointer hover:bg-amber-600 rounded-2xl text-white font-medium' onClick={handleStart}>Enroll Now</button>}
            
           </div>
@@ -227,7 +237,8 @@ const CourseOverview = () => {
           {activeTab === "curriculum" && (
             <div>
               {video && <video controls autoPlay muted loop playsInline width="100%" src={video} className='rounded-lg mb-4'></video>}
-              <Collapse accordion items={items} />
+              
+              {<Collapse accordion items={items} />}
             </div>
           )}
           {activeTab === "instructor" && (

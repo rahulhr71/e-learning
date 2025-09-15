@@ -9,7 +9,10 @@ import TypingMaster from './components/Typing';
 import CourseOverview from './pages/CourseOverview'
 import Login from './auth/Login';
 import Register from './auth/Register';
-import CourseEnrollmentPage from './components/Enrolled'
+import MyCourses from './components/Enrolled'
+import  VideoPlayerPage from './pages/VideoPlayer'
+import ProfilePage from './pages/ProfilePage';
+import ReactHooksGuide from './components/HooksExample'
 function App() {
 return (
   <>
@@ -23,9 +26,11 @@ return (
     <Route path='/courses/:id' element={<CourseOverview />} />
     <Route path='/login' element={<Login/>} />
     <Route path='/register' element={<Register/>} />
-    <Route path='enrolled-courses' element={<CourseEnrollmentPage/>}/>
+    <Route path='enrolled-courses' element={<MyCourses/>}/>
+    <Route path='/view-Course/:id' element={<VideoPlayerPage/>}/>
+    <Route path='/profile' element={<ProfilePage/>}/>
+    <Route path='/ex' element={<ReactHooksGuide/>}/>
   </Routes>
-  
   </>
   
 );

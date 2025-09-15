@@ -180,13 +180,13 @@ export default function Notes() {
               <>
                 {note.image && (
                   <img
-                    src={note.image}
+                    src={note.url}
                     alt={note.title}
-                    className="h-32 w-full object-cover rounded mb-2"
+                    className="  rounded mb-2"
                   />
                 )}
                 <a
-                  href={note.url}
+                  href={note.image}
                   target="_blank"
                   rel="noreferrer"
                   className="text-blue-600 hover:underline font-medium"
