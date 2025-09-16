@@ -10,6 +10,10 @@ import AddCourse from "../components/AddCourse";
 
 export default function AdminDashboard() {
   const [active, setActive] = useState("Home");
+  const handleLogout=()=>{
+    localStorage.removeItem("adminToken")
+    window.location.reload()
+  }
   return (
   <div className="flex h-screen bg-gray-100">
  
@@ -21,7 +25,7 @@ export default function AdminDashboard() {
     <div className="flex justify-end bg-white z-30 w-full p-3 sticky top-0">
       <button
         className="bg-[#204cdc] border-primary border rounded-full inline-flex items-center justify-center py-2 px-6 text-base font-medium text-white hover:bg-[#1B44C8] hover:border-[#1B44C8] disabled:bg-gray-300 disabled:border-gray-300 disabled:text-gray-500 active:bg-[#1B44C8] active:border-[#1B44C8]"
-      >
+       onClick={handleLogout}>
         Logout
       </button>
     </div>

@@ -1,16 +1,3 @@
-/**
- * backend/server-hls.js
- * Single-file secure HLS + per-user watermark backend
- *
- * npm install express mongoose multer cloudinary dotenv cors
- *
- * Required env:
- * CLOUDINARY_CLOUD_NAME
- * CLOUDINARY_API_KEY
- * CLOUDINARY_API_SECRET
- * MONGO_URI
- * PORT (optional)
- */
 
 import express from "express";
 import mongoose from "mongoose";
@@ -48,12 +35,9 @@ const videoSchema = new mongoose.Schema({
 
 const Video = mongoose.model("Video", videoSchema);
 
-// Helper: encode overlay text
 function encodeOverlayText(text = "") {
   return encodeURIComponent(text).replace(/%20/g, "+");
 }
-
-// Upload endpoint
 app.post("/upload-video", upload.single("video"), async (req, res) => {
   try {
     const { courseId, title } = req.body;
@@ -69,7 +53,6 @@ app.post("/upload-video", upload.single("video"), async (req, res) => {
       folder: "course_videos",
     });
 
-    // cleanup
     try { fs.unlinkSync(localPath); } catch (e) {}
 
     const video = new Video({
@@ -86,8 +69,6 @@ app.post("/upload-video", upload.single("video"), async (req, res) => {
   }
 });
 
-// Get videos (returns signed HLS URLs with watermark)
-// POST to allow user info in body: { userEmail, userId }
 app.post("/get-videos/:courseId", async (req, res) => {
   try {
     const { courseId } = req.params;
@@ -101,14 +82,13 @@ app.post("/get-videos/:courseId", async (req, res) => {
 
       // Use string transformations so overlay is embedded into HLS stream
       const transformation = [
-        // streaming profile (adaptive)
+        
         { streaming_profile: "hd" },
         // overlay text: font Arial size 28, bottom-right y-offset 30, semi-transparent
         { overlay: { font_family: "Arial", font_size: 28, text: watermarkText }, gravity: "south_east", y: 30, opacity: 60 },
         { format: "m3u8" },
       ];
 
-      // Note: cloudinary.url with transformation object works with SDK v2
       const secureUrl = cloudinary.url(v.public_id, {
         resource_type: "video",
         type: "authenticated",
@@ -127,7 +107,6 @@ app.post("/get-videos/:courseId", async (req, res) => {
   }
 });
 
-// optional: delete video (cleanup)
 app.post("/delete/:publicId", async (req, res) => {
   try {
     const { publicId } = req.params;

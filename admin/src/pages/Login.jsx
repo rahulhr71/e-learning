@@ -5,11 +5,11 @@ import axios from 'axios'
 import { Eye, EyeOff, Loader2, AlertCircle, CheckCircle } from 'lucide-react'
 
 export default function Login() {
-  // ✅ Correct useState
+
   const [userC, setUserC] = useState(null)
   const navigate = useNavigate()
   
-  // Form states
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -19,7 +19,6 @@ export default function Login() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  // Redirect if already logged in
   useEffect(() => {
     const storedUser = localStorage.getItem("user")
     if (storedUser) {
@@ -65,7 +64,7 @@ export default function Login() {
     setLoading(true)
 
     try {
-      const response = await axios.post('http://localhost:4000/api/auth/login', {
+      const response = await axios.post('http://localhost:4000/api/auth/admin/login', {
         email: formData.email.trim(),
         password: formData.password
       })
@@ -109,7 +108,7 @@ export default function Login() {
       <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-50">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
-            Sign in to your account
+            Sign in to Admin account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Welcome back! Please enter your details.
@@ -133,7 +132,6 @@ export default function Login() {
 
           <div className="bg-white py-8 px-6 shadow-sm rounded-lg border border-gray-200">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
                   Email address
@@ -151,7 +149,6 @@ export default function Login() {
                 />
               </div>
 
-              {/* Password Field */}
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-2">
                   Password
@@ -199,15 +196,7 @@ export default function Login() {
             </form>
           </div>
 
-          <p className="mt-8 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
-            <Link 
-              to="/register" 
-              className="font-semibold text-[#ff772e] hover:text-[#e6661a] transition-colors"
-            >
-              Create account
-            </Link>
-          </p>
+          
         </div>
       </div>
     </>

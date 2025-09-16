@@ -123,11 +123,7 @@ export default function Login() {
       <Navbar />
       <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-50">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            alt="Company Logo"
-            src={logo}
-            className="mx-auto h-12 w-auto"
-          />
+          
           <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
             Sign in to your account
           </h2>
@@ -145,7 +141,6 @@ export default function Login() {
             </div>
           )}
 
-          {/* Success Message */}
           {success && (
             <div className="mb-4 p-4 rounded-md bg-green-50 border border-green-200 flex items-center gap-3">
               <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
@@ -155,7 +150,7 @@ export default function Login() {
 
           <div className="bg-white py-8 px-6 shadow-sm rounded-lg border border-gray-200">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
+
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
                   Email address
@@ -173,7 +168,6 @@ export default function Login() {
                 />
               </div>
 
-              {/* Password Field */}
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-2">
                   Password
@@ -225,7 +219,7 @@ export default function Login() {
             </form>
           </div>
 
-          {/* Register Link */}
+          
           <p className="mt-8 text-center text-sm text-gray-600">
             Don't have an account?{' '}
             <Link 
@@ -236,7 +230,7 @@ export default function Login() {
             </Link>
           </p>
 
-          {/* Divider */}
+         
           <div className="mt-8">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -247,7 +241,7 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Social Login Buttons (Optional) */}
+            
             <div className="mt-6 grid grid-cols-1 gap-3">
               <button
                 type="button"
